@@ -68,6 +68,10 @@ public:
 	void GetMousePosition(int &x, int &y);
 	void GetMouseMotion(int& x, int& y);
 
+	//	Get mouse x/y coordinates
+	int GetMouseX() const;
+	int GetMouseY() const;
+
 private:
 	bool		windowEvents[WE_COUNT];
 	j1KeyState*	keyboard;

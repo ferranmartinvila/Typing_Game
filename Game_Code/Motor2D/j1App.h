@@ -15,11 +15,10 @@ class j1Textures;
 class j1Audio;
 class j1FileSystem;
 class j1Scene;
-class j1Map;
-class j1Pathfinding;
 class j1Fonts;
 class j1Gui;
 class j1Console;
+class j1Physics;
 
 class j1App
 {
@@ -88,10 +87,9 @@ public:
 	j1Render*			render = NULL;
 	j1Textures*			tex = NULL;
 	j1Audio*			audio = NULL;
+	j1Physics*			physics = NULL;
 	j1Scene*			scene = NULL;
 	j1FileSystem*		fs = NULL;
-	j1Map*				map = NULL;
-	j1Pathfinding*		pathfinding = NULL;
 	j1Fonts*			font = NULL;
 	j1Gui*				gui = NULL;
 	j1Console*			console = NULL;

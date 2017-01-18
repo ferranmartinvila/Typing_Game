@@ -15,6 +15,7 @@ enum GUI_INPUT;
 enum CONSOLE_COMMAND_TYPE;
 struct Cvar;
 struct Command;
+struct PhysBody;
 
 class j1Module
 {
@@ -89,6 +90,12 @@ public:
 
 	}
 	virtual void Console_Command_Input(Command* command, Cvar* cvar, p2SString* input)
+	{
+
+	}
+
+	//Physics functions -------------
+	virtual void OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	{
 
 	}

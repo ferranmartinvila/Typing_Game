@@ -68,7 +68,7 @@ bool j1Gui::PreUpdate()
 bool j1Gui::PostUpdate()
 {
 	//Debug Mode ------------------------------------------
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN && ItemSelected != nullptr && ItemSelected->GetUItype() != TEXT_BOX)debug = !debug;
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)debug = !debug;
 
 	//Tab Input
 	if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN)

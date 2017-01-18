@@ -34,12 +34,6 @@
     <ClCompile Include="PugiXml\src\pugixml.cpp">
       <Filter>Develop  ========\Tools\PuguiXML</Filter>
     </ClCompile>
-    <ClCompile Include="j1Map.cpp">
-      <Filter>Develop  ========\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Pathfinding.cpp">
-      <Filter>Develop  ========\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="j1Timer.cpp">
       <Filter>Develop  ========\Tools</Filter>
     </ClCompile>
@@ -72,6 +66,9 @@
     </ClCompile>
     <ClCompile Include="j1Console.cpp">
       <Filter>Develop  ========\UserInteraface\Console</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Physics.cpp">
+      <Filter>Develop  ========\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -126,12 +123,6 @@
     <ClInclude Include="PugiXml\src\pugixml.hpp">
       <Filter>Develop  ========\Tools\PuguiXML</Filter>
     </ClInclude>
-    <ClInclude Include="j1Map.h">
-      <Filter>Develop  ========\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Pathfinding.h">
-      <Filter>Develop  ========\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="j1Timer.h">
       <Filter>Develop  ========\Tools</Filter>
     </ClInclude>
@@ -173,6 +164,9 @@
     </ClInclude>
     <ClInclude Include="p2Queue.h">
       <Filter>Prog 2 ===========</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Physics.h">
+      <Filter>Develop  ========\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
