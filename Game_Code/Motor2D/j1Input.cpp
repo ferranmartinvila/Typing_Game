@@ -7,6 +7,8 @@
 #include "j1Console.h"
 #include "UI_Text_Box.h"
 #include "j1Window.h"
+#include "BlocksManager.h"
+
 #include "SDL/include/SDL.h"
 
 #define MAX_KEYS 300
@@ -154,6 +156,13 @@ bool j1Input::PreUpdate()
 			if (App->gui->ItemSelected != nullptr && App->gui->ItemSelected->GetUItype() == UI_TYPE::TEXT_BOX && event.text.text[0] != 'Â') {
 				((UI_Text_Box*)App->gui->ItemSelected)->PushTextSegment(event.text.text, ((UI_Text_Box*)App->gui->ItemSelected)->GetCursorPos());
 				((UI_Text_Box*)App->gui->ItemSelected)->SetCursorPos(((UI_Text_Box*)App->gui->ItemSelected)->GetCursorPos() + 1);
+			}
+			else
+			{
+				if (App->blocks_manager->GetBlockTarget()->GetTextCharTarget() == event.text.text[0])
+				{
+					App->blocks_manager->GetBlockTarget()->PlusCharIndex();
+				}
 			}
 		}
 		break;

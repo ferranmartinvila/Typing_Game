@@ -32,19 +32,26 @@ public:
 private:
 
 	p2List<TextBlock*>	text_blocks;
+	TextBlock*			target_block = nullptr;
 
 	SDL_Color			default_color;
 	_TTF_Font*			default_font = nullptr;
 
 public:
 	
+	//Get Functions -----------------------------
+	TextBlock*	GetBlockTarget()const;
 	SDL_Color	GetDefaultColor()const;
 	_TTF_Font*	GetDefaultFont()const;
 
+	//Set Functions -----------------------------
 	void		SetDefalutColor(const SDL_Color& new_color);
 	void		SetDefalutFont(_TTF_Font*	def_font);
 
+	//Factory -----------------------------------
 	TextBlock*	GenerateTextBlock(const char* text);
 
+	//Handle Console Input ----------------------
+	void Console_Command_Input(Command* command, Cvar* cvar, p2SString* input);
 };
 #endif // _BLOCKS_MANAGER_

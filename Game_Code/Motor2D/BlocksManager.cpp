@@ -3,10 +3,11 @@
 #include "p2Log.h"
 #include "j1App.h"
 #include "j1Fonts.h"
-
+#include "j1Console.h"
 //Constructors ----------------------------------
 j1BlocksManager::j1BlocksManager()
 {
+	name.create("blocks_manager");
 }
 
 //Destructors -----------------------------------
@@ -24,6 +25,9 @@ bool j1BlocksManager::Start()
 {
 	default_font = App->font->default;
 	default_color = { 155,55,255,180 };
+
+	//Add Console Command
+	App->console->AddCommand("reset", this);
 	return true;
 }
 
@@ -73,8 +77,12 @@ bool j1BlocksManager::CleanUp()
 	return ret;
 }
 
-
 //Functionality ---------------------------------
+TextBlock * j1BlocksManager::GetBlockTarget() const
+{
+	return target_block;
+}
+
 SDL_Color j1BlocksManager::GetDefaultColor() const
 {
 	return default_color;
@@ -104,6 +112,21 @@ TextBlock * j1BlocksManager::GenerateTextBlock(const char * text)
 	
 	//Add it to the manager list
 	text_blocks.add(new_block);
+	target_block = new_block;
 
 	return new_block;
+}
+
+void j1BlocksManager::Console_Command_Input(Command * command, Cvar * cvar, p2SString * input)
+{
+	//Reset command
+	if (*command->GetCommandStr() == "reset")
+	{
+		p2List_item<TextBlock*>* item = text_blocks.start;
+		while (item)
+		{
+			item->data->ResetCharIndex();
+			item = item->next;
+		}
+	}
 }

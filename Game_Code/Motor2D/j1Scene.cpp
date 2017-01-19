@@ -55,7 +55,7 @@ bool j1Scene::Start()
 
 
 	//Test Zone -------------------------------------------
-	App->blocks_manager->GenerateTextBlock("test");
+	TextBlock* text = App->blocks_manager->GenerateTextBlock("test");
 
 	//Load Scene background -------------------------------
 	background = App->tex->Load("textures/background.png");
