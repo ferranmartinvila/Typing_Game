@@ -59,7 +59,7 @@ void UI_Button::HandleInput()
 	//Mouse Left Button -------------------------
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
 	{
-		if (this->MouseIsIn() && App->gui->upper_element == this->layer)
+		if (this->MouseIsIn() && App->gui->upper_element <= this->layer)
 		{
 			App->gui->ItemSelected = this;
 			button_state = ON;

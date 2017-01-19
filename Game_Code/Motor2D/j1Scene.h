@@ -3,6 +3,7 @@
 
 #include "j1Module.h"
 #include "p2DynArray.h"
+#include "j1Timer.h"
 
 struct SDL_Texture;
 struct UI_Button;
@@ -13,6 +14,7 @@ struct UI_Element;
 struct UI_Text_Box;
 struct UI_Scroll;
 struct PhysBody;
+struct TextBlock;
 
 class j1Scene : public j1Module
 {
@@ -46,20 +48,13 @@ public:
 
 private:
 
-	//Scene	UI
-	UI_Element* scene_1_screen;
+	//Background ----------------------
+	SDL_Texture*		background;
+	PhysBody*			background_collide_mark;
 
-	//Scene UI Elements
-	UI_Image*		player1_item;
-	UI_Image*		player1_item_2;
-	UI_Scroll*		scroll;
-	UI_Scroll*		lateral_scroll;
-	UI_Text_Box*	text_box;
-	UI_Button*		button;
-
-	UI_Image*		background;
-	PhysBody*		background_collide_mark;
-
+	//Timming ----------------------------
+	j1Timer				label_generate_timer;
+	uint				label_rate = 500;
 };
 
 #endif // __j1SCENE_H__

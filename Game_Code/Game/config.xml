@@ -1,25 +1,25 @@
 <!-- Config file for the game -->
 
 <config>
-  <app framerate_cap = "300">
+  <app framerate_cap = "60">
     <title>Typing_Game</title>
     <organization>UPC</organization>
     <c_vars>
-      <c_var name = "maxfps"	description = "Limit Max framerate"	value = "300"	type = "integrer"	only_read="false"/>
+      <c_var name = "maxfps"	description = "Limit Max framerate"	value = "60"	type = "integrer"	only_read="false"/>
     </c_vars>
   </app>
 	
   <renderer>
-    <vsync value="false"/>
+    <vsync value="true"/>
     <c_vars>
     </c_vars>
   </renderer>
 
-  <font>
-    <default_font file="fonts/open_sans/OpenSans-Regular.ttf" size="12"/>
+  <fonts>
+    <default_font file="fonts/open_sans/OpenSans-Regular.ttf" size="25"/>
     <c_vars>
     </c_vars>
-  </font>
+  </fonts>
 
   <gui>
     <atlas file="gui/atlas.png"/>

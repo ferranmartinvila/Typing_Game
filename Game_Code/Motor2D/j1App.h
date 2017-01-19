@@ -19,6 +19,7 @@ class j1Fonts;
 class j1Gui;
 class j1Console;
 class j1Physics;
+class j1BlocksManager;
 
 class j1App
 {
@@ -93,7 +94,7 @@ public:
 	j1Fonts*			font = NULL;
 	j1Gui*				gui = NULL;
 	j1Console*			console = NULL;
-
+	j1BlocksManager*	blocks_manager = NULL;
 	
 	// Add a new module to handle
 	void		AddModule(j1Module* module);

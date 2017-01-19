@@ -18,6 +18,7 @@
 
 #include "j1Gui.h"
 #include "j1Console.h"
+#include "BlocksManager.h"
 
 #include "j1App.h"
 
@@ -38,6 +39,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	font = new j1Fonts();
 	gui = new j1Gui();
 	console = new j1Console();
+	blocks_manager = new j1BlocksManager();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -47,6 +49,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(tex);
 	AddModule(audio);
 	AddModule(font);
+	AddModule(blocks_manager);
 	AddModule(gui);
 	AddModule(physics);
 

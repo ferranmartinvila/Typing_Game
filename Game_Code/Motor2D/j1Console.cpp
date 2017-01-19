@@ -68,6 +68,7 @@ bool j1Console::Awake(pugi::xml_node& config)
 	console_input_box->SetCursorSize(cursor_w, cursor_h);
 	console_input_box->SetCursorColor({ 255,255,255,255 });
 	console_input_box->SetBox(input_box);
+	console_input_box->SetLayer(10);
 
 	//Build Console Labels Scroll
 	console_labels_scroll = (UI_Scroll*)App->gui->GenerateUI_Element(SCROLL);
@@ -80,6 +81,7 @@ bool j1Console::Awake(pugi::xml_node& config)
 	console_labels_scroll->SetContentWindow({ scroll_area.x, scroll_area.y, item_location.x, input_box.y });
 	console_labels_scroll->SetScrollType(VERTICAL);
 	console_labels_scroll->SetScrollMaxValue(500);
+	console_labels_scroll->SetLayer(10);
 
 	LOG("Console UI Build");
 

@@ -5,7 +5,6 @@
 #include "j1Fonts.h"
 
 struct p2SString;
-struct _TTF_Font;
 struct SDL_Texture;
 
 class UI_String : public UI_Element {

@@ -23,7 +23,6 @@ j1Physics::j1Physics() : j1Module()
 
 	world = NULL;
 	mouse_joint = NULL;
-	flap_down_left_fix_joint = NULL;
 	debug = false;
 	name.create("physics");
 }
@@ -48,104 +47,6 @@ bool j1Physics::Start()
 
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
-
-	//Flaps
-	flap_down_right = App->physics->CreateRectangle(535, 784, 70, 12, MAP);
-	flap_down_left = App->physics->CreateRectangle(388, 783, 70, 12, MAP);
-	flap_up_left = App->physics->CreateRectangle(300, 309, 70, 12, MAP);
-	flap_up_right = App->physics->CreateRectangle(630, 375, 70, 12, MAP);
-
-	//Flaps points
-	flap_down_right_point = App->physics->CreateStaticCircle(535, 784, 4, MAP);
-	flap_down_left_point = App->physics->CreateStaticCircle(388, 783, 4, MAP);
-	flap_up_left_point = App->physics->CreateStaticCircle(300, 309, 4, MAP);
-	flap_up_right_point = App->physics->CreateStaticCircle(630, 375, 4, MAP);
-
-
-	//Flaps joints
-	b2RevoluteJointDef def;
-
-	//Up Right
-	def.bodyA = flap_up_right_point->body;
-	def.bodyB = flap_up_right->body;
-	def.lowerAngle = -55 * DEGTORAD;
-	def.upperAngle = -20 * DEGTORAD;
-	def.enableLimit = true;
-	def.localAnchorB = { 0.500f,0.0f };
-	flap_up_right_fix_joint = (b2RevoluteJoint*)world->CreateJoint(&def);
-
-	//Down Right
-	def.bodyA = flap_down_right_point->body;
-	def.bodyB = flap_down_right->body;
-	def.lowerAngle = -22 * DEGTORAD;
-	def.upperAngle = 30 * DEGTORAD;
-	def.enableLimit = true;
-	def.localAnchorB = { 0.500f,0.0f };
-	flap_down_right_fix_joint = (b2RevoluteJoint*)world->CreateJoint(&def);
-
-	//Up Left
-	def.bodyA = flap_up_left_point->body;
-	def.bodyB = flap_up_left->body;
-	def.lowerAngle = -10 * DEGTORAD;
-	def.upperAngle = 35 * DEGTORAD;
-	def.enableLimit = true;
-	def.localAnchorB = { -0.500f,0.0f };
-	flap_up_left_fix_joint = (b2RevoluteJoint*)world->CreateJoint(&def);
-
-	//Down Left
-	def.bodyA = flap_down_left_point->body;
-	def.bodyB = flap_down_left->body;
-	def.lowerAngle = -26 * DEGTORAD;
-	def.upperAngle = 24 * DEGTORAD;
-	def.enableLimit = true;
-	def.localAnchorB = { -0.500f,0.0f };
-	flap_down_left_fix_joint = (b2RevoluteJoint*)world->CreateJoint(&def);
-
-	//Wheels
-
-	//Mid
-	mid_wheel_point = App->physics->CreateStaticCircle(532, 242, 4, MAP);
-	mid_wheel = CreateCircle(532, 238, 25, MAP);
-	def.bodyA = mid_wheel->body;
-	def.bodyB = mid_wheel_point->body;
-	def.motorSpeed = -8.0f;
-	def.maxMotorTorque = 80.0f;
-	def.localAnchorB = { 0.0f , 0.0f };
-	def.enableMotor = false;
-	def.enableLimit = false;
-	mid_wheel_engine = (b2RevoluteJoint*)world->CreateJoint(&def);
-	mid_wheel->joint = mid_wheel_engine;
-
-
-	//LEFT
-	left_wheel_point = App->physics->CreateStaticCircle(474, 180, 4, MAP);
-	left_wheel = CreateCircle(474, 180, 25, MAP);
-	def.bodyA = left_wheel->body;
-	def.bodyB = left_wheel_point->body;
-	def.motorSpeed = -8.0f;
-	def.maxMotorTorque = 80.0f;
-	def.localAnchorB = { 0.0f , 0.0f };
-	def.enableMotor = true;
-	def.enableMotor = false;
-	def.enableLimit = false;
-	left_wheel_engine = (b2RevoluteJoint*)world->CreateJoint(&def);
-	left_wheel->joint = left_wheel_engine;
-
-	//RIGHT
-	right_wheel_point = App->physics->CreateStaticCircle(590, 180, 4, MAP);
-	right_wheel = CreateCircle(590, 180, 25, MAP);
-	def.bodyA = right_wheel->body;
-	def.bodyB = right_wheel_point->body;
-	def.motorSpeed = -8.0f;
-	def.maxMotorTorque = 80.0f;
-	def.localAnchorB = { 0.0f , 0.0f };
-	def.enableMotor = true;
-	def.enableMotor = false;
-	def.enableLimit = false;
-	right_wheel_engine = (b2RevoluteJoint*)world->CreateJoint(&def);
-	right_wheel->joint = right_wheel_engine;
-
-
 
 	return true;
 }
@@ -187,12 +88,14 @@ PhysBody* j1Physics::CreateCircle(int x, int y, int radius, collision_type type)
 	fixture.density = 1.0f;
 	fixture.filter.categoryBits = type;
 
-	if (type == BALL)
-		b->SetBullet(true);
-		fixture.filter.maskBits = LAUNCHER | SENSOR;
-	if (type == MAP)
+	if (type == TEXT_BLOCK)
 	{
-		fixture.filter.maskBits = BALL;
+		b->SetBullet(true);
+		fixture.filter.maskBits = MAP;
+	}
+	else if (type == MAP)
+	{
+		fixture.filter.maskBits = TEXT_BLOCK;
 		fixture.restitution = 1.0f;
 
 	}
@@ -242,9 +145,9 @@ PhysBody* j1Physics::CreateRectangle(int x, int y, int width, int height, collis
 
 	b2FixtureDef fixture;
 	fixture.shape = &box;
-	fixture.density = 1.0f;
+	fixture.density = 0.1f;
 	fixture.filter.categoryBits = type;
-
+	
 	b->CreateFixture(&fixture);
 
 	PhysBody* pbody = new PhysBody();
@@ -252,7 +155,7 @@ PhysBody* j1Physics::CreateRectangle(int x, int y, int width, int height, collis
 	b->SetUserData(pbody);
 	pbody->width = width * 0.5f;
 	pbody->height = height * 0.5f;
-
+	
 	return pbody;
 }
 
@@ -272,7 +175,6 @@ PhysBody* j1Physics::CreateRectangleSensor(int x, int y, int width, int height, 
 	fixture.density = 1.0f;
 	fixture.isSensor = true;
 	fixture.filter.categoryBits = type;
-	fixture.filter.maskBits = BALL;
 
 	b->CreateFixture(&fixture);
 
@@ -307,8 +209,12 @@ PhysBody* j1Physics::CreateChain(int x, int y, int* points, int size, collision_
 
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
+
+	//Its own type
 	fixture.filter.categoryBits = type;
-	fixture.filter.maskBits = BALL;
+
+	//With what collide
+	fixture.filter.maskBits = TEXT_BLOCK;
 	
 	fixture.restitution = restitution;
 	b->CreateFixture(&fixture);
@@ -348,7 +254,7 @@ PhysBody* j1Physics::CreateSensorChain(int x, int y, int* points, int size, coll
 	fixture.shape = &shape;
 	fixture.isSensor = true;
 	fixture.filter.categoryBits = type;
-	fixture.filter.maskBits = BALL;
+	fixture.filter.maskBits = MAP;
 
 	fixture.restitution = restitution;
 	b->CreateFixture(&fixture);
@@ -547,6 +453,12 @@ void PhysBody::GetPosition(int& x, int &y) const
 float PhysBody::GetRotation() const
 {
 	return RADTODEG * body->GetAngle();
+}
+
+void PhysBody::SetPosition(int x, int y)
+{
+	b2Vec2 position((float32)x,(float32)y);
+	body->SetTransform(position, body->GetAngle());
 }
 
 bool PhysBody::Contains(int x, int y) const

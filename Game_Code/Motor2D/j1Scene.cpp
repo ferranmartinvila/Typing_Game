@@ -16,6 +16,9 @@
 #include "UI_String.h"
 #include "UI_Scroll.h"
 
+//Text Blocks
+#include "BlocksManager.h"
+
 
 j1Scene::j1Scene() : j1Module()
 {
@@ -36,6 +39,7 @@ bool j1Scene::Awake(pugi::xml_node& config)
 bool j1Scene::Start()
 {
 
+	//Background mark collide build
 	int background_points[18] = {
 		621, 3,
 		620, 870,
@@ -47,76 +51,23 @@ bool j1Scene::Start()
 		647, 4,
 		628, 4
 	};
+	App->physics->CreateChain(0, 0, background_points, 18, MAP);
 
-	App->physics->CreateChain(0, 0, background_points, 18, collision_type::MAP);
 
-	App->gui->SetDefaultInputTarget(this);
+	//Test Zone -------------------------------------------
+	App->blocks_manager->GenerateTextBlock("test");
+
+	//Load Scene background -------------------------------
+	background = App->tex->Load("textures/background.png");
+
 
 	//UI Scene build --------------------------------------
-	scene_1_screen = App->gui->GenerateUI_Element(UNDEFINED);
-	scene_1_screen->SetBox({ 0,0,App->win->screen_surface->w, App->win->screen_surface->h });
-	scene_1_screen->Activate();
-	scene_1_screen->SetInputTarget(this);
 
-	//Background img build
-	background = (UI_Image*)App->gui->GenerateUI_Element(IMG);
-	background->ChangeTextureId(0);
-	background->ChangeTextureRect({ 0,0,650,900 });
-	background->AdjustBox();
-	scene_1_screen->AddChild(background);
-
-	//Players img build
-	player1_item = (UI_Image*)App->gui->GenerateUI_Element(IMG);
-	player1_item->ChangeTextureRect({ 1485, 110, 72, 109 });
-	player1_item->AdjustBox();
-	player1_item->SetBoxPosition(50, -100);
-
-	player1_item_2 = (UI_Image*)App->gui->GenerateUI_Element(IMG);
-	player1_item_2->ChangeTextureRect({ 1485, 110, 72, 109 });
-	player1_item_2->AdjustBox();
-	player1_item_2->SetBoxPosition(-80, 70);
-	
-	//Button build
-	button = (UI_Button*)App->gui->GenerateUI_Element(BUTTON);
-	button->SetBox({ 50,50,230,60 });
-	button->SetTexOFF({ 648,172,219,59 });
-	button->SetTexON({ 5,116,220,59 });
-	button->SetTexOVER({ 416,170,220,62 });
-	scene_1_screen->AddChild(button);
-
-	//TextBox build
-	text_box = (UI_Text_Box*)App->gui->GenerateUI_Element(TEXT_BOX);
-	text_box->SetBox({ 120,120,50,50 });
-	text_box->SetTextColor({50,220,0,0});
-	text_box->SetCursorSize(2, 5);
-	scene_1_screen->AddChild(text_box);
-
-	//Scroll build
-	scroll = (UI_Scroll*)App->gui->GenerateUI_Element(SCROLL);
-	scroll->SetScrollableItem({ 397,20 }, { 1000,880,19,20 });
-	scroll->SetScrollableBack({ 400,20 }, { 985,874,13,149 });
-	scroll->SetBox({ 250,250,450,350 });
-	scroll->SetContentWindow({ 20,20,300,250 });
-	scroll->SetScrollType(VERTICAL_INV);
-	scroll->SetScrollMaxValue(500);
-	scroll->AddScrollItem(player1_item);
-	scene_1_screen->AddChild(scroll);
-
-
-	//	Lateral Scroll build
-	lateral_scroll = (UI_Scroll*)App->gui->GenerateUI_Element(SCROLL);
-	lateral_scroll->SetScrollableItem({ 400,20 }, { 1000,880,19,20 });
-	lateral_scroll->SetScrollableBack({ 400,20 }, { 0,9,307,15 });
-	lateral_scroll->SetBox({ 250,250,850,350 });
-	lateral_scroll->SetContentWindow({ 20,20,300,250 });
-	lateral_scroll->SetScrollType(LATERAL_INV);
-	lateral_scroll->SetScrollMaxValue(500);
-	lateral_scroll->AddScrollItem(player1_item_2);
-	scene_1_screen->AddChild(lateral_scroll);
-
-
-	App->gui->PushScreen(scene_1_screen);
 	// ----------------------------------------------------
+
+
+	//Timer Start -----------------------------------------
+	label_generate_timer.Start();
 
 	return true;
 }
@@ -124,32 +75,23 @@ bool j1Scene::Start()
 // Called each loop iteration
 bool j1Scene::PreUpdate()
 {
+
 	return true;
 }
 
 // Called each loop iteration
 bool j1Scene::Update(float dt)
 {
+	App->render->Blit(background, 0, 0);
+
 	// Gui Upper Element ---------------------------
-	App->gui->CalculateUpperElement(scene_1_screen);
+	//App->gui->CalculateUpperElement(scene_1_screen);
 
-	//MAP MOVEMENT-----------------------------------------
-	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-	{
-		App->render->camera.y += SDL_ceil(500 * dt);
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-	{
-		App->render->camera.y -= SDL_ceil(500 * dt);
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		App->render->camera.x += SDL_ceil(500 * dt);
-
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		App->render->camera.x -= SDL_ceil(500 * dt);
-
+	//Check label generate timer
+	/*if (label_generate_timer.Read() > label_rate) {
+		App->physics->CreateRectangle(325, 0, 10, 10, collision_type::BALL);
+		label_generate_timer.Start();
+	}*/
 
 	return true;
 }
@@ -190,24 +132,8 @@ void j1Scene::GUI_Input(UI_Element* target, GUI_INPUT input)
 	case MOUSE_LEFT_BUTTON_DOWN:
 		break;
 	case MOUSE_LEFT_BUTTON_REPEAT:
-		if (target == scroll)
-		{
-			if (scroll->MoveScroll(x,y) == false)scroll->MoveBox(x, y);
-		}
-		else if (target == lateral_scroll)
-		{
-			if (lateral_scroll->MoveScroll(x, y) == false)lateral_scroll->MoveBox(x, y);
-		}
 		break;
 	case MOUSE_LEFT_BUTTON_UP:
-		if (target == scroll)
-		{
-			scroll->UnselectScroll();
-		}
-		else if (target == lateral_scroll)
-		{
-			lateral_scroll->UnselectScroll();
-		}
 		break;
 	case MOUSE_RIGHT_BUTTON:
 		break;

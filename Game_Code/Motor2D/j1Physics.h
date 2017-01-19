@@ -5,7 +5,7 @@
 #include "Box2D/Box2D/Box2D.h"
 
 #define GRAVITY_X 0.0f
-#define GRAVITY_Y -9.8f
+#define GRAVITY_Y -3.8f
 
 #define PIXELS_PER_METER 50.0f // if touched change METER_PER_PIXEL too
 #define METER_PER_PIXEL 0.02f // this is 1 / PIXELS_PER_METER !
@@ -15,47 +15,15 @@
 
 enum collision_type
 {
-	BALL = 1,
-	RAMP_A = 2,
-	RAMP_B = 4,
-	RAMP_C = 8,
-	MAP = 16,
-	LAUNCHER = 32,
-	SENSOR = 64,
-	YELLOW_LIGHT = 128,
-	ORANGE_LIGHT = 256,
-	RED_LIGHT = 512,
-	YELLOW_LIGHT_UP = 1024,
-	ORANGE_LIGHT_UP = 2048,
-	RED_LIGHT_UP = 4096,
-	FINAL_RAMP = 8192,
-	STOP_SENSOR = 16384
-	
+	TEXT_BLOCK = 1,
+	MAP = 2
 };
 
 enum BODY_TYPE 
 {
 	NONE,
-	SENSOR_RAMP_A,
-	SENSOR_RAMP_B,
-	SENSOR_RAMP_C,
-	TURBO_UP,
-	TURBO_UP_LEFT,
-	TURBO_DOWN,
-	WHEEL_LIGHT_LEFT,
-	WHEEL_LIGHT_MID,
-	WHEEL_LIGHT_RIGHT,
-	RAMP_LIGHT_LEFT,
-	RAMP_LIGHT_RIGHT,
-	RAMP_LIGHT_UP,
-	RAMP_LIGHT_A,
-	RAMP_LIGHT_B,
-	RAMP_LIGHT_C,
-	LEFT_LUNG,
-	RIGHT_LUNG,
-	END,
-	JACKPOT,
-	DOOR
+	MAP_MARK,
+	BLOCK
 };
 
 // Small class to return to other modules to track position and rotation of physics bodies
@@ -67,6 +35,9 @@ public:
 
 	void GetPosition(int& x, int &y) const;
 	float GetRotation() const;
+
+	void SetPosition(int x,int y);
+
 	bool Contains(int x, int y) const;
 	int RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const;
 	
@@ -113,41 +84,6 @@ private:
 	b2World* world;
 	b2MouseJoint* mouse_joint;
 	b2Body* ground;
-
-public:
-
-	PhysBody* flap_up_right;
-	PhysBody* flap_down_right;
-	PhysBody* flap_up_left;
-	PhysBody* flap_down_left;
-
-	PhysBody* left_wheel;
-	PhysBody* mid_wheel;
-	PhysBody* right_wheel;
-
-
-
-
-private:
-
-
-	PhysBody* flap_up_right_point;
-	PhysBody* flap_down_right_point;
-	PhysBody* flap_up_left_point;
-	PhysBody* flap_down_left_point;
-
-	b2RevoluteJoint* flap_up_right_fix_joint;
-	b2RevoluteJoint* flap_down_right_fix_joint;
-	b2RevoluteJoint* flap_up_left_fix_joint;
-	b2RevoluteJoint* flap_down_left_fix_joint;
-
-	PhysBody* mid_wheel_point;
-	PhysBody* left_wheel_point;
-	PhysBody* right_wheel_point;
-
-	b2RevoluteJoint* mid_wheel_engine;
-	b2RevoluteJoint* left_wheel_engine;
-	b2RevoluteJoint* right_wheel_engine;
 
 	bool delete_object = false;
 };

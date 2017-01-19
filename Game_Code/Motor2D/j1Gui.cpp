@@ -115,7 +115,7 @@ bool j1Gui::CleanUp()
 
 	}
 
-	return true;
+	return ret;
 }
 
 
