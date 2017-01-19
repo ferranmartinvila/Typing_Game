@@ -8,6 +8,7 @@
 #include "j1Window.h"
 #include "j1Gui.h"
 #include "j1Scene.h"
+#include "j1Physics.h"
 
 //UI Elements
 #include "UI_Text_Box.h"
@@ -35,6 +36,20 @@ bool j1Scene::Awake(pugi::xml_node& config)
 bool j1Scene::Start()
 {
 
+	int background_points[18] = {
+		621, 3,
+		620, 870,
+		28, 871,
+		28, 7,
+		1, 7,
+		1, 892,
+		648, 892,
+		647, 4,
+		628, 4
+	};
+
+	App->physics->CreateChain(0, 0, background_points, 18, collision_type::MAP);
+
 	App->gui->SetDefaultInputTarget(this);
 
 	//UI Scene build --------------------------------------
@@ -42,6 +57,13 @@ bool j1Scene::Start()
 	scene_1_screen->SetBox({ 0,0,App->win->screen_surface->w, App->win->screen_surface->h });
 	scene_1_screen->Activate();
 	scene_1_screen->SetInputTarget(this);
+
+	//Background img build
+	background = (UI_Image*)App->gui->GenerateUI_Element(IMG);
+	background->ChangeTextureId(0);
+	background->ChangeTextureRect({ 0,0,650,900 });
+	background->AdjustBox();
+	scene_1_screen->AddChild(background);
 
 	//Players img build
 	player1_item = (UI_Image*)App->gui->GenerateUI_Element(IMG);

@@ -1,18 +1,17 @@
 <!-- Config file for the game -->
 
 <config>
-  <app framerate_cap="">
-    <title>Pathfinding Test</title>
+  <app framerate_cap = "300">
+    <title>Typing_Game</title>
     <organization>UPC</organization>
     <c_vars>
-      <c_var name = "maxfps"	description = "Limit Max framerate"	value = "60"	type = "integrer"	only_read="false"/>
+      <c_var name = "maxfps"	description = "Limit Max framerate"	value = "300"	type = "integrer"	only_read="false"/>
     </c_vars>
   </app>
 	
   <renderer>
     <vsync value="false"/>
     <c_vars>
-      <c_var name = "vsync"	description = "Active/Desactive vsync"	value = "0"	type = "boolean"	only_read="true"/>
     </c_vars>
   </renderer>
 
@@ -29,7 +28,7 @@
   </gui>
     
   <window>
-    <resolution width="1024" height="768" scale="1"/>
+    <resolution width="650" height="900" scale="1"/>
     <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="false"/>
@@ -44,25 +43,19 @@
     </c_vars>
   </file_system>
 
-  <map>
-    <folder>maps/</folder>
-    <c_vars>
-    </c_vars>
-  </map>
-
   <scene>
-  	<map_folder>way_size_walk.tmx</map_folder>
   </scene>
 
 
   <console>
-	  <area x = "0" y = "0" w = "1024" h = "300"/>
+	  <area x = "0" y = "0" w = "650" h = "300"/>
 	  <area_color r = "50" g = "50" b = "50" a = "150"/>
 	  <input_box x = "0" y = "280" w = "1024" h = "20"/>
 	  <console_font file="fonts/open_sans/OpenSans-Regular.ttf" size="13"/>
-	  <font_color r = "80" g = "150" b = "250" a ="200"/>
+	  <font_color r = "80" g = "250" b = "250" a ="200"/>
 	  <cursor w = "3" h = "20"/>
     <c_vars>
     </c_vars>
   </console>
+  
 </config>

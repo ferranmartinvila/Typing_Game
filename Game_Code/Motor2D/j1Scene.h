@@ -12,6 +12,7 @@ struct UI_Image;
 struct UI_Element;
 struct UI_Text_Box;
 struct UI_Scroll;
+struct PhysBody;
 
 class j1Scene : public j1Module
 {
@@ -55,6 +56,9 @@ private:
 	UI_Scroll*		lateral_scroll;
 	UI_Text_Box*	text_box;
 	UI_Button*		button;
+
+	UI_Image*		background;
+	PhysBody*		background_collide_mark;
 
 };
 

@@ -42,7 +42,7 @@ bool j1Gui::Start()
 	atlas = App->tex->Load(atlas_file_name.GetString());
 
 	//Load other textures
-	ui_textures.add(App->tex->Load("gui/sf2.png"));
+	ui_textures.add(App->tex->Load("gui/background.png"));
 
 	return true;
 }
