@@ -13,7 +13,7 @@ class TextBlock
 {
 public:
 
-	TextBlock(const char* text, _TTF_Font*	font, const SDL_Color& off_color, const SDL_Color& on_color);
+	TextBlock(const char* text, _TTF_Font*	font, const SDL_Color& off_color, const SDL_Color& on_color, uint x_margin = 0, uint y_margin = 0);
 	~TextBlock();
 
 private:
@@ -27,6 +27,8 @@ private:
 
 	PhysBody*				body = nullptr;
 	SDL_Texture*			texture = nullptr;
+	int					x_margin = 0;
+	int					y_margin = 0;
 
 public:
 

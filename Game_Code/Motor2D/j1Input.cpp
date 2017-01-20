@@ -159,7 +159,7 @@ bool j1Input::PreUpdate()
 			}
 			else
 			{
-				if (App->blocks_manager->GetBlockTarget()->GetTextCharTarget() == event.text.text[0])
+				if (App->blocks_manager->GetBlockTarget() != nullptr && App->blocks_manager->GetBlockTarget()->GetTextCharTarget() == event.text.text[0])
 				{
 					App->blocks_manager->GetBlockTarget()->PlusCharIndex();
 				}

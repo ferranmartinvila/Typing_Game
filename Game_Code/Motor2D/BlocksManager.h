@@ -37,7 +37,10 @@ private:
 
 	SDL_Color			default_color_on;
 	SDL_Color			default_color_off;
+	SDL_Color			default_target_color;
+	SDL_Color			default_nontarget_color;
 	_TTF_Font*			default_font = nullptr;
+	SDL_Texture*		default_block_texture = nullptr;
 
 	pugi::xml_document	strings_doc;
 	p2DynArray<char*>	strings;
@@ -48,18 +51,22 @@ public:
 	int LoadStringsXML(pugi::xml_document& data_file) const;
 
 	//Get Functions -----------------------------
-	TextBlock*	GetBlockTarget()const;
-	SDL_Color	GetDefaultColor()const;
-	_TTF_Font*	GetDefaultFont()const;
-	char*		GetRandomWord()const;
+	TextBlock*		GetBlockTarget()const;
+	SDL_Color		GetDefaultColor()const;
+	_TTF_Font*		GetDefaultFont()const;
+	char*			GetRandomWord()const;
+	SDL_Texture*	GetDefaultBlockTexture()const;
+	SDL_Color		GetTargetColor()const;
+	SDL_Color		GetNonTargetColor()const;
 
 	//Set Functions -----------------------------
 	void		SetDefalutColor(const SDL_Color& new_color);
 	void		SetDefalutFont(_TTF_Font*	def_font);
+	void		SetBlockTarget(TextBlock* target);
 
 	//Factory -----------------------------------
 	TextBlock*	GenerateTextBlock(const char* text);
-	TextBlock*	GenerateRandomTextBlock();
+	TextBlock*	GenerateRandomTextBlock(uint x_margin = 0, uint y_margin = 0);
 	void		DeleteTarget();
 
 	//Handle Console Input ----------------------

@@ -1,6 +1,8 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "BlocksManager.h"
 
+#include "Text_Block.h"
+
 #include <time.h>
 #include <stdlib.h>
 
@@ -10,6 +12,7 @@
 #include "j1Console.h"
 #include "j1Physics.h"
 #include "j1FileSystem.h"
+#include "j1Textures.h"
 
 //Constructors ----------------------------------
 j1BlocksManager::j1BlocksManager()
@@ -50,8 +53,10 @@ bool j1BlocksManager::Awake(pugi::xml_node & config)
 bool j1BlocksManager::Start()
 {
 	default_font = App->font->default;
-	default_color_on = { 155,55,255,180 };
-	default_color_off = { 255,105,255,255 };
+	default_target_color = { 141, 255, 238,150 };
+	default_nontarget_color = { 0,0,0,255 };
+	default_color_on = { 0,255,255,180 };
+	default_color_off = { 255,105,255,0 };
 
 	//Add Console Command
 	App->console->AddCommand("reset", this);
@@ -59,6 +64,9 @@ bool j1BlocksManager::Start()
 
 	//Set random seed
 	srand(NULL);
+
+	//Load default block texture
+	default_block_texture = App->tex->Load("textures/block_texture.png");
 
 	return true;
 }
@@ -96,9 +104,10 @@ bool j1BlocksManager::CleanUp()
 	if (item != nullptr)item_prev = item->prev;
 	while (item) {
 
-		//CleanUp the item childs
-		ret = item->data->CleanUp();
 		//Delete all item data
+		ret = item->data->CleanUp();
+
+		//Delete item from list
 		text_blocks.del(item);
 
 		item = item_prev;
@@ -154,6 +163,21 @@ char * j1BlocksManager::GetRandomWord() const
 	return strings[index];
 }
 
+SDL_Texture * j1BlocksManager::GetDefaultBlockTexture() const
+{
+	return default_block_texture;
+}
+
+SDL_Color j1BlocksManager::GetTargetColor() const
+{
+	return default_target_color;
+}
+
+SDL_Color j1BlocksManager::GetNonTargetColor() const
+{
+	return default_nontarget_color;
+}
+
 void j1BlocksManager::SetDefalutColor(const SDL_Color & new_color)
 {
 	default_color_on = new_color;
@@ -162,6 +186,13 @@ void j1BlocksManager::SetDefalutColor(const SDL_Color & new_color)
 void j1BlocksManager::SetDefalutFont(_TTF_Font * def_font)
 {
 	default_font = def_font;
+}
+
+void j1BlocksManager::SetBlockTarget(TextBlock * target)
+{
+	if (target_block == target)return;
+	target_block = target;
+	target_block->GenerateTextureFromText();
 }
 
 TextBlock * j1BlocksManager::GenerateTextBlock(const char * text)
@@ -174,22 +205,20 @@ TextBlock * j1BlocksManager::GenerateTextBlock(const char * text)
 	//Add it to the manager list
 	text_blocks.add(new_block);
 
-	//Update target block
-	target_block = text_blocks.start->data;
+	SetBlockTarget(text_blocks.start->data);
 
 	return new_block;
 }
 
-TextBlock * j1BlocksManager::GenerateRandomTextBlock()
+TextBlock * j1BlocksManager::GenerateRandomTextBlock(uint x_margin, uint y_margin)
 {
 	//Create the new text block
-	TextBlock* new_block = new TextBlock(GetRandomWord(), default_font, App->blocks_manager->default_color_off, App->blocks_manager->default_color_on);
+	TextBlock* new_block = new TextBlock(GetRandomWord(), default_font, App->blocks_manager->default_color_off, App->blocks_manager->default_color_on,x_margin,y_margin);
 
 	//Add it to the manager list
 	text_blocks.add(new_block);
 
-	//Update target block
-	target_block = text_blocks.start->data;
+	SetBlockTarget(text_blocks.start->data);
 
 	return new_block;
 }
@@ -199,19 +228,33 @@ void j1BlocksManager::DeleteTarget()
 	text_blocks.del(text_blocks.At(text_blocks.find(target_block)));
 	App->physics->DeleteBody(target_block->GetBody());
 	delete target_block;
-	if (text_blocks.end != nullptr)target_block = text_blocks.end->data;
+	if (text_blocks.start != nullptr)SetBlockTarget(text_blocks.start->data);
 }
 
 void j1BlocksManager::Console_Command_Input(Command * command, Cvar * cvar, p2SString * input)
 {
+
 	//Reset command
 	if (*command->GetCommandStr() == "reset")
 	{
-		p2List_item<TextBlock*>* item = text_blocks.start;
-		while (item)
-		{
-			item->data->ResetCharIndex();
-			item = item->next;
+		p2List_item<TextBlock*>* item = text_blocks.end;
+		p2List_item<TextBlock*>* item_prev = nullptr;
+
+		if (item != nullptr)item_prev = item->prev;
+		while (item) {
+
+			//Delete item physbody
+			App->physics->DeleteBody(item->data->GetBody());
+			
+			//Delete all item data
+			item->data->CleanUp();
+			
+			//Delete item from list
+			text_blocks.del(item);
+			
+			item = item_prev;
+			if (item_prev != nullptr)item_prev = item_prev->prev;
+
 		}
 	}
 	//Generate Block command

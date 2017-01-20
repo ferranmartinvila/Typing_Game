@@ -8,7 +8,7 @@
 #include "j1Render.h"
 
 // Constructors ---------------------------------
-TextBlock::TextBlock(const char * text, _TTF_Font* font, const SDL_Color& off_color, const SDL_Color& on_color) :text(text),text_font(font),text_color_off(off_color), text_color_on(on_color)
+TextBlock::TextBlock(const char * text, _TTF_Font* font, const SDL_Color& off_color, const SDL_Color& on_color, uint x_margin, uint y_margin) :text(text),text_font(font),text_color_off(off_color), text_color_on(on_color),x_margin(x_margin),y_margin(y_margin)
 {
 	if (!GenerateTextureFromText())LOG("Error Generating TextBlock Textures");
 	if (!GenerateBodyFromTexture())LOG("Error Generating TextBlock Body");
@@ -49,7 +49,7 @@ bool TextBlock::GenerateTextureFromText()
 
 	//Data to place textures
 	int w = 0, h = 0;
-	uint total_w = 0;
+	int total_w = 0;
 	SDL_Texture* on_texture = nullptr;
 	SDL_Texture* off_texture = nullptr;
 	//Generate completed textblock texture
@@ -68,11 +68,28 @@ bool TextBlock::GenerateTextureFromText()
 	}
 
 	//Generate a texture with the two parts
-	texture = SDL_CreateTexture(App->render->renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_TARGET, total_w, h);
+	texture = SDL_CreateTexture(App->render->renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_TARGET, total_w + (x_margin * 2), h + (y_margin * 2));
 	SDL_SetRenderTarget(App->render->renderer, texture);
-	if(on_texture != nullptr)App->render->Blit(on_texture, 0, 0);
-	if(off_texture != nullptr)App->render->Blit(off_texture, total_w - w, 0);
+
+	//Texture blit
+	App->render->Blit(App->blocks_manager->GetDefaultBlockTexture(), 0, 0);
+
+	//Text blit
+	if(on_texture != nullptr)App->render->Blit(on_texture, x_margin, y_margin);
+	if(off_texture != nullptr)App->render->Blit(off_texture, total_w - w + x_margin, y_margin);
+
+	//Mark blit
+	SDL_Color color;
+	if (App->blocks_manager->GetBlockTarget() == this)color = App->blocks_manager->GetTargetColor();
+	else color = App->blocks_manager->GetNonTargetColor();
+	App->render->DrawQuad({ 0, 0, x_margin, h +  x_margin * 2}, color.r, color.g, color.b, color.a);
+	App->render->DrawQuad({ total_w + x_margin, 0, x_margin, h + x_margin * 2 }, color.r, color.g, color.b, color.a);
+	App->render->DrawQuad({ 0, 0, total_w + x_margin * 2, y_margin}, color.r, color.g, color.b, color.a);
+	App->render->DrawQuad({ 0, h + y_margin, total_w + x_margin * 2, y_margin }, color.r, color.g, color.b, color.a);
+
+	//Set blend mode
 	SDL_SetTextureBlendMode(texture, SDL_BlendMode::SDL_BLENDMODE_BLEND);
+	//Set viewport to screen
 	SDL_SetRenderTarget(App->render->renderer, NULL);
 
 	return true;
@@ -87,7 +104,7 @@ bool TextBlock::GenerateBodyFromTexture()
 	}
 	int w, h;
 	SDL_QueryTexture(texture, NULL, NULL, &w, &h);
-	body = App->physics->CreateRectangle(350, 0, w, h, TEXT_BLOCK);
+	body = App->physics->CreateRectangle(350, -50, w, h, TEXT_BLOCK);
 
 	return true;
 }

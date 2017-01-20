@@ -53,10 +53,6 @@ bool j1Scene::Start()
 	};
 	App->physics->CreateChain(0, 0, background_points, 18, MAP);
 
-
-	//Test Zone -------------------------------------------
-	TextBlock* text = App->blocks_manager->GenerateTextBlock("test");
-
 	//Load Scene background -------------------------------
 	background = App->tex->Load("textures/background.png");
 
@@ -89,7 +85,7 @@ bool j1Scene::Update(float dt)
 
 	//Check label generate timer
 	if (label_generate_timer.Read() > label_rate) {
-		App->blocks_manager->GenerateRandomTextBlock();
+		TextBlock* item = App->blocks_manager->GenerateRandomTextBlock(5,2);
 		label_generate_timer.Start();
 	}
 

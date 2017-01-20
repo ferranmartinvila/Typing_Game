@@ -100,6 +100,9 @@ bool j1Console::Start()
 	AddCommand("help", this);
 
 	LOG("Console Labels Generated");
+
+	//Desactive console
+	ChangeConsoleState();
 	return true;
 }
 
@@ -239,6 +242,7 @@ void j1Console::ChangeConsoleState()
 		console_input_box->SetText(nullptr);
 		console_input_box->Desactivate();
 		console_labels_scroll->Desactivate();
+		if (App->gui->ItemSelected == console_input_box || App->gui->ItemSelected == console_labels_scroll)App->gui->ItemSelected = nullptr;
 	}
 }
 
