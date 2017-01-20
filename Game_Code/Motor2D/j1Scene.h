@@ -6,15 +6,9 @@
 #include "j1Timer.h"
 
 struct SDL_Texture;
-struct UI_Button;
 struct UI_String;
-struct UI_Interactive_String;
 struct UI_Image;
-struct UI_Element;
-struct UI_Text_Box;
-struct UI_Scroll;
 struct PhysBody;
-struct TextBlock;
 
 class j1Scene : public j1Module
 {
@@ -48,6 +42,12 @@ public:
 
 private:
 
+	//Scene UI ------------------------
+	UI_String*	player_score;
+	UI_String*	player_max_score;
+	UI_String*	player_lvl;
+	UI_Image*	player_data_marks;
+
 	//Background ----------------------
 	SDL_Texture*		background;
 	PhysBody*			background_collide_mark;
@@ -55,6 +55,11 @@ private:
 	//Timming ----------------------------
 	j1Timer				label_generate_timer;
 	uint				label_rate = 1000;
+
+public:
+
+	//Functionality -----------------------------
+	void	SetPlayerScoreText(uint score_value);
 };
 
 #endif // __j1SCENE_H__

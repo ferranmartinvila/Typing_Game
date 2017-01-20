@@ -12,6 +12,7 @@ TextBlock::TextBlock(const char * text, _TTF_Font* font, const SDL_Color& off_co
 {
 	if (!GenerateTextureFromText())LOG("Error Generating TextBlock Textures");
 	if (!GenerateBodyFromTexture())LOG("Error Generating TextBlock Body");
+	CalculateBlockScore();
 }
 
 //Destructors -----------------------------------
@@ -109,6 +110,11 @@ bool TextBlock::GenerateBodyFromTexture()
 	return true;
 }
 
+void TextBlock::CalculateBlockScore()
+{
+	score = text.Length();
+}
+
 PhysBody * TextBlock::GetBody() const
 {
 	return body;
@@ -132,6 +138,11 @@ SDL_Texture * TextBlock::GetTexture() const
 char TextBlock::GetTextCharTarget() const
 {
 	return text.GetString()[char_index];
+}
+
+uint TextBlock::GetScore() const
+{
+	return score;
 }
 
 void TextBlock::SetText(char * new_text)

@@ -1,4 +1,6 @@
-#include <stdlib.h>
+#define _CRTDBG_MAP_ALLOC
+#include <cstdlib>
+#include <crtdbg.h>
 
 #include "p2Defs.h"
 #include "p2Log.h"
@@ -108,5 +110,7 @@ int main(int argc, char* args[])
 	LOG("... Bye! :)\n");
 
 	// Dump memory leaks
+	_CrtDumpMemoryLeaks();
+
 	return result;
 }

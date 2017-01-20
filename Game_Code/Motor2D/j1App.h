@@ -20,6 +20,7 @@ class j1Gui;
 class j1Console;
 class j1Physics;
 class j1BlocksManager;
+class j1Player;
 
 class j1App
 {
@@ -95,7 +96,8 @@ public:
 	j1Gui*				gui = NULL;
 	j1Console*			console = NULL;
 	j1BlocksManager*	blocks_manager = NULL;
-	
+	j1Player*			player = NULL;
+
 	// Add a new module to handle
 	void		AddModule(j1Module* module);
 	//Get Module pointer by name

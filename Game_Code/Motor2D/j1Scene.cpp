@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "p2Defs.h"
 #include "p2Log.h"
 #include "j1App.h"
@@ -9,12 +10,10 @@
 #include "j1Gui.h"
 #include "j1Scene.h"
 #include "j1Physics.h"
+#include "Player.h"
 
 //UI Elements
-#include "UI_Text_Box.h"
-#include "UI_Button.h"
 #include "UI_String.h"
-#include "UI_Scroll.h"
 
 //Text Blocks
 #include "BlocksManager.h"
@@ -58,7 +57,21 @@ bool j1Scene::Start()
 
 
 	//UI Scene build --------------------------------------
+	UI_Element* screen_1_ui = App->gui->GenerateUI_Element(UI_TYPE::UNDEFINED);
+	screen_1_ui->Activate();
+	screen_1_ui->SetInputTarget(this);
 
+	//UI Player Score build
+	player_score = (UI_String*)App->gui->GenerateUI_Element(UI_TYPE::STRING);
+	player_score->SetBoxPosition(450, 125);
+	player_score->SetFont(App->font->default);
+	player_score->SetColor({ 80,80,80,255 });
+	player_score->Activate();
+	player_score->SetInputTarget(this);
+	screen_1_ui->AddChild(player_score);
+
+
+	App->gui->PushScreen(screen_1_ui);
 	// ----------------------------------------------------
 
 
@@ -144,4 +157,14 @@ void j1Scene::GUI_Input(UI_Element* target, GUI_INPUT input)
 	case ENTER:
 		break;
 	}
+}
+
+//Functionality -----------------------------
+void j1Scene::SetPlayerScoreText(uint score_value)
+{
+	char* str = new char[10];
+	_itoa(score_value, str, 10);
+	player_score->SetString(str);
+	player_score->GenerateTexture();
+	delete str;
 }

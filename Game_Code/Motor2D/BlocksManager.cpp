@@ -13,6 +13,8 @@
 #include "j1Physics.h"
 #include "j1FileSystem.h"
 #include "j1Textures.h"
+#include "Player.h"
+#include"j1Scene.h"
 
 //Constructors ----------------------------------
 j1BlocksManager::j1BlocksManager()
@@ -225,9 +227,16 @@ TextBlock * j1BlocksManager::GenerateRandomTextBlock(uint x_margin, uint y_margi
 
 void j1BlocksManager::DeleteTarget()
 {
+	//Add Target score to player
+	App->player->PlusScore(target_block->GetScore());
+	App->scene->SetPlayerScoreText(App->player->GetCurrentScore());
+
+	//Delete target block
 	text_blocks.del(text_blocks.At(text_blocks.find(target_block)));
 	App->physics->DeleteBody(target_block->GetBody());
 	delete target_block;
+
+	//Set new target block
 	if (text_blocks.start != nullptr)SetBlockTarget(text_blocks.start->data);
 }
 

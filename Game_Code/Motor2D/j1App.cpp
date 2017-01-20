@@ -19,6 +19,7 @@
 #include "j1Gui.h"
 #include "j1Console.h"
 #include "BlocksManager.h"
+#include "Player.h"
 
 #include "j1App.h"
 
@@ -40,6 +41,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	gui = new j1Gui();
 	console = new j1Console();
 	blocks_manager = new j1BlocksManager();
+	player = new j1Player();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -50,12 +52,13 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(audio);
 	AddModule(font);
 	AddModule(blocks_manager);
-	AddModule(gui);
-	AddModule(physics);
 
+	AddModule(physics);
+	
 	// scene last
 	AddModule(scene);
-	
+	AddModule(player);
+	AddModule(gui);
 	AddModule(console);
 
 	// render last to swap buffer

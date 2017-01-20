@@ -72,6 +72,9 @@
     <ClCompile Include="BlocksManager.cpp">
       <Filter>Game\TextBlocks</Filter>
     </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Game\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -172,6 +175,9 @@
     <ClInclude Include="BlocksManager.h">
       <Filter>Game\TextBlocks</Filter>
     </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Game\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tanks">
@@ -203,6 +209,9 @@
     </Filter>
     <Filter Include="Game\TextBlocks">
       <UniqueIdentifier>{64d112ab-a6d0-436b-9250-6311dbd40497}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player">
+      <UniqueIdentifier>{a07e2984-8aad-41e0-b9f2-bd0cb6e143f0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -24,11 +24,11 @@ private:
 	SDL_Color				text_color_on;
 	
 	uint					char_index = 0;
-
+	uint					score = 0;
 	PhysBody*				body = nullptr;
 	SDL_Texture*			texture = nullptr;
-	int					x_margin = 0;
-	int					y_margin = 0;
+	int						x_margin = 0;
+	int						y_margin = 0;
 
 public:
 
@@ -40,12 +40,14 @@ public:
 	//Functionality ---------
 	bool			GenerateTextureFromText();
 	bool			GenerateBodyFromTexture();
+	void			CalculateBlockScore();
 
 	PhysBody*		GetBody()const;
 	void			GetPosition(int& x, int &y) const;
 	float			GetRotation() const;
 	SDL_Texture*	GetTexture()const;
 	char			GetTextCharTarget()const;
+	uint			GetScore()const;
 
 	void			SetText(char* new_text);
 	void			SetPosition(int x, int y);
