@@ -54,7 +54,7 @@ private:
 
 	//Timming ----------------------------
 	j1Timer				label_generate_timer;
-	uint				label_rate = 500;
+	uint				label_rate = 100;
 };
 
 #endif // __j1SCENE_H__

@@ -2,6 +2,7 @@
 
 #include "p2Log.h"
 #include "j1App.h"
+#include "BlocksManager.h"
 #include "j1Physics.h"
 #include "j1Fonts.h"
 #include "j1Render.h"
@@ -10,7 +11,7 @@
 TextBlock::TextBlock(const char * text, _TTF_Font* font, const SDL_Color& off_color, const SDL_Color& on_color) :text(text),text_font(font),text_color_off(off_color), text_color_on(on_color)
 {
 	if (!GenerateTextureFromText())LOG("Error Generating TextBlock Textures");
-	if(!GenerateBodyFromTexture())LOG("Error Generating TextBlock Body");
+	if (!GenerateBodyFromTexture())LOG("Error Generating TextBlock Body");
 }
 
 //Destructors -----------------------------------
@@ -33,6 +34,7 @@ void TextBlock::Draw()
 
 bool TextBlock::CleanUp()
 {
+	delete body;
 	return true;
 }
 
@@ -131,8 +133,11 @@ void TextBlock::SetPosition(int x, int y)
 void TextBlock::PlusCharIndex()
 {
 	char_index++;
-	if (char_index > text.Length())return;
-
+	if (char_index == text.Length())
+	{
+		App->blocks_manager->DeleteTarget();
+		return;
+	}
 	GenerateTextureFromText();
 }
 

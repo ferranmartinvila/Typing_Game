@@ -13,7 +13,7 @@ class TextBlock
 {
 public:
 
-	TextBlock(const char* text, _TTF_Font*	font, const SDL_Color& off_color = {255,255,255,255}, const SDL_Color& on_color = { 255,105,255,255 });
+	TextBlock(const char* text, _TTF_Font*	font, const SDL_Color& off_color, const SDL_Color& on_color);
 	~TextBlock();
 
 private:
@@ -50,5 +50,6 @@ public:
 
 	void			PlusCharIndex();
 	void			ResetCharIndex();
+
 };
 #endif

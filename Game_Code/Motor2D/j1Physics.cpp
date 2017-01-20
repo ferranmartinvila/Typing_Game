@@ -269,6 +269,18 @@ PhysBody* j1Physics::CreateSensorChain(int x, int y, int* points, int size, coll
 	return pbody;
 }
 
+bool j1Physics::DeleteBody(PhysBody * target)
+{
+	if (target == nullptr)
+	{
+		LOG("Invalid PhysBody to delete");
+		return false;
+	}
+
+	world->DestroyBody(target->body);
+	return true;
+}
+
 // 
 bool j1Physics::PostUpdate()
 {

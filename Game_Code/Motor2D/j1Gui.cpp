@@ -42,7 +42,6 @@ bool j1Gui::Start()
 	atlas = App->tex->Load(atlas_file_name.GetString());
 
 	//Load other textures
-	ui_textures.add(App->tex->Load("gui/background.png"));
 
 	return true;
 }
@@ -71,7 +70,7 @@ bool j1Gui::PostUpdate()
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)debug = !debug;
 
 	//Tab Input
-	if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN && screens.start != nullptr)
 	{
 		if (ItemSelected == NULL)ItemSelected = GetTabElement(screens.start->data, 1);
 		else if (ItemSelected->GetInputTarget() != (j1Module*)App->console)

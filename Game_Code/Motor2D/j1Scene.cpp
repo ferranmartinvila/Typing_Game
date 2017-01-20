@@ -88,10 +88,10 @@ bool j1Scene::Update(float dt)
 	//App->gui->CalculateUpperElement(scene_1_screen);
 
 	//Check label generate timer
-	/*if (label_generate_timer.Read() > label_rate) {
-		App->physics->CreateRectangle(325, 0, 10, 10, collision_type::BALL);
+	if (label_generate_timer.Read() > label_rate) {
+		App->blocks_manager->GenerateRandomTextBlock();
 		label_generate_timer.Start();
-	}*/
+	}
 
 	return true;
 }

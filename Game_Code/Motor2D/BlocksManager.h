@@ -3,6 +3,7 @@
 
 #include "j1Module.h"
 #include "Text_Block.h"
+#include "p2DynArray.h"
 
 class j1BlocksManager : public j1Module
 {
@@ -34,15 +35,23 @@ private:
 	p2List<TextBlock*>	text_blocks;
 	TextBlock*			target_block = nullptr;
 
-	SDL_Color			default_color;
+	SDL_Color			default_color_on;
+	SDL_Color			default_color_off;
 	_TTF_Font*			default_font = nullptr;
+
+	pugi::xml_document	strings_doc;
+	p2DynArray<char*>	strings;
 
 public:
 	
+	//Load Strings Data -------------------------
+	int LoadStringsXML(pugi::xml_document& data_file) const;
+
 	//Get Functions -----------------------------
 	TextBlock*	GetBlockTarget()const;
 	SDL_Color	GetDefaultColor()const;
 	_TTF_Font*	GetDefaultFont()const;
+	char*		GetRandomWord()const;
 
 	//Set Functions -----------------------------
 	void		SetDefalutColor(const SDL_Color& new_color);
@@ -50,6 +59,8 @@ public:
 
 	//Factory -----------------------------------
 	TextBlock*	GenerateTextBlock(const char* text);
+	TextBlock*	GenerateRandomTextBlock();
+	void		DeleteTarget();
 
 	//Handle Console Input ----------------------
 	void Console_Command_Input(Command* command, Cvar* cvar, p2SString* input);

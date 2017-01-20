@@ -72,7 +72,7 @@ public:
 	PhysBody* CreateChain(int x, int y, int* points, int size, collision_type type,  uint restitution = 0, BODY_TYPE b_type = NONE);
 	PhysBody* CreateSensorChain(int x, int y, int* points, int size, collision_type type, BODY_TYPE b_type = NONE, uint restitution = 0);
 	
-	
+	bool DeleteBody(PhysBody* target);
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
