@@ -35,9 +35,14 @@ private:
 	uint current_score = 0;
 	uint max_score = 0;
 
+	bool alive = true;
+
 public:
 
 	//Functionality
+	void	EndParty();
+	bool	GetPlayerState()const;
+
 	uint	PlusScore(uint plus);
 	uint	PlusLevel(uint plus);
 	

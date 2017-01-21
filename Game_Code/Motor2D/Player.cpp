@@ -1,4 +1,6 @@
 #include "Player.h"
+#include "j1Scene.h"
+#include "p2Log.h"
 
 //Constructors ----------------------------------
 j1Player::j1Player()
@@ -17,6 +19,19 @@ bool j1Player::Awake(pugi::xml_node & config)
 }
 
 
+void j1Player::EndParty()
+{
+	alive = false;
+	if (current_score > max_score)max_score = current_score;
+	current_score = 0;
+	LOG("You Lose :(");
+}
+
+bool j1Player::GetPlayerState() const
+{
+	return alive;
+}
+
 //Functionality ---------------------------------
 uint j1Player::PlusScore(uint plus)
 {
@@ -26,9 +41,9 @@ uint j1Player::PlusScore(uint plus)
 uint j1Player::PlusLevel(uint plus)
 {
 	xp += plus;
-	while (xp > lvl * 100)
+	while (xp > lvl * 25)
 	{
-		xp -= lvl * 100;
+		xp -= lvl * 25;
 		lvl++;
 	}
 	return lvl;

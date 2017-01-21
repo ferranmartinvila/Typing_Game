@@ -99,6 +99,7 @@ bool j1BlocksManager::PostUpdate()
 bool j1BlocksManager::CleanUp()
 {
 	LOG("Freeing BlocksManager");
+
 	bool ret = true;
 	p2List_item<TextBlock*>* item = text_blocks.end;
 	p2List_item<TextBlock*>* item_prev = nullptr;
@@ -111,13 +112,12 @@ bool j1BlocksManager::CleanUp()
 
 		//Delete item from list
 		text_blocks.del(item);
-
 		item = item_prev;
+
 		if (item_prev != nullptr)item_prev = item_prev->prev;
-
 	}
-
-	strings.Delete_All();
+	
+		ret = strings.Delete_All();
 
 	return ret;
 }
@@ -180,6 +180,29 @@ SDL_Color j1BlocksManager::GetNonTargetColor() const
 	return default_nontarget_color;
 }
 
+TextBlock * j1BlocksManager::GetHigherBlock(int time) const
+{
+	if (text_blocks.start == nullptr)return nullptr;
+	
+	int x, y;
+	TextBlock*	target = nullptr;
+	
+	p2List_item<TextBlock*>* item = text_blocks.start;
+	while (item)
+	{
+		item->data->GetPosition(x, y);
+
+		if ((time - item->data->GetBornTime()) > 0 && y < App->scene->GetHeightLimit())
+		{
+			target = item->data;
+			break;
+		}
+		item = item->next;
+	}
+
+	return target;
+}
+
 void j1BlocksManager::SetDefalutColor(const SDL_Color & new_color)
 {
 	default_color_on = new_color;
@@ -227,10 +250,16 @@ TextBlock * j1BlocksManager::GenerateRandomTextBlock(uint x_margin, uint y_margi
 
 void j1BlocksManager::DeleteTarget()
 {
-	//Add Target score to player
+	//Add Target score to player score
 	App->player->PlusScore(target_block->GetScore());
 	App->scene->SetPlayerScoreText(App->player->GetCurrentScore());
-
+	//Add Target score to player xp
+	uint player_lvl = App->player->GetLevel();
+	App->player->PlusLevel(target_block->GetScore());
+	if (player_lvl != App->player->GetLevel())
+	{
+		App->scene->SetPlayerLevelText(App->player->GetLevel());
+	}
 	//Delete target block
 	text_blocks.del(text_blocks.At(text_blocks.find(target_block)));
 	App->physics->DeleteBody(target_block->GetBody());
@@ -240,31 +269,38 @@ void j1BlocksManager::DeleteTarget()
 	if (text_blocks.start != nullptr)SetBlockTarget(text_blocks.start->data);
 }
 
+bool j1BlocksManager::DeleteAllBlocks()
+{
+	bool ret = true;
+	p2List_item<TextBlock*>* item = text_blocks.end;
+	p2List_item<TextBlock*>* item_prev = nullptr;
+
+	if (item != nullptr)item_prev = item->prev;
+	while (item) {
+
+
+		//Delete item body
+		App->physics->DeleteBody(item->data->GetBody());
+
+		//Delete all item data
+		ret = item->data->CleanUp();
+
+		//Delete item from list
+		text_blocks.del(item);
+		item = item_prev;
+		if (item_prev != nullptr)item_prev = item_prev->prev;
+
+	}
+	return ret;
+}
+
 void j1BlocksManager::Console_Command_Input(Command * command, Cvar * cvar, p2SString * input)
 {
 
 	//Reset command
 	if (*command->GetCommandStr() == "reset")
 	{
-		p2List_item<TextBlock*>* item = text_blocks.end;
-		p2List_item<TextBlock*>* item_prev = nullptr;
-
-		if (item != nullptr)item_prev = item->prev;
-		while (item) {
-
-			//Delete item physbody
-			App->physics->DeleteBody(item->data->GetBody());
-			
-			//Delete all item data
-			item->data->CleanUp();
-			
-			//Delete item from list
-			text_blocks.del(item);
-			
-			item = item_prev;
-			if (item_prev != nullptr)item_prev = item_prev->prev;
-
-		}
+		DeleteAllBlocks();
 	}
 	//Generate Block command
 	if (*command->GetCommandStr() == "generate_block")

@@ -105,7 +105,7 @@ bool TextBlock::GenerateBodyFromTexture()
 	}
 	int w, h;
 	SDL_QueryTexture(texture, NULL, NULL, &w, &h);
-	body = App->physics->CreateRectangle(350, -50, w, h, TEXT_BLOCK);
+	body = App->physics->CreateRectangle(350, -20, w, h, TEXT_BLOCK);
 
 	return true;
 }
@@ -145,6 +145,11 @@ uint TextBlock::GetScore() const
 	return score;
 }
 
+int TextBlock::GetBornTime() const
+{
+	return born_time;
+}
+
 void TextBlock::SetText(char * new_text)
 {
 	if (strlen(new_text) == 0)return;
@@ -156,6 +161,11 @@ void TextBlock::SetText(char * new_text)
 void TextBlock::SetPosition(int x, int y)
 {
 	body->SetPosition(x, y);
+}
+
+void TextBlock::SetBornTime(uint time)
+{
+	born_time = time;
 }
 
 void TextBlock::PlusCharIndex()

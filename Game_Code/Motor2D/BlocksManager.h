@@ -47,6 +47,8 @@ private:
 
 public:
 	
+	
+
 	//Load Strings Data -------------------------
 	int LoadStringsXML(pugi::xml_document& data_file) const;
 
@@ -58,6 +60,7 @@ public:
 	SDL_Texture*	GetDefaultBlockTexture()const;
 	SDL_Color		GetTargetColor()const;
 	SDL_Color		GetNonTargetColor()const;
+	TextBlock*		GetHigherBlock(int time)const;
 
 	//Set Functions -----------------------------
 	void		SetDefalutColor(const SDL_Color& new_color);
@@ -68,6 +71,7 @@ public:
 	TextBlock*	GenerateTextBlock(const char* text);
 	TextBlock*	GenerateRandomTextBlock(uint x_margin = 0, uint y_margin = 0);
 	void		DeleteTarget();
+	bool		DeleteAllBlocks();
 
 	//Handle Console Input ----------------------
 	void Console_Command_Input(Command* command, Cvar* cvar, p2SString* input);

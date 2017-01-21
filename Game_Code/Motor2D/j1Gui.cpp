@@ -170,6 +170,17 @@ uint j1Gui::PushScreen(const UI_Element* new_screen)
 	return screens.count();
 }
 
+bool j1Gui::DeleteScreen(UI_Element * target_screen)
+{
+	uint index = screens.find(target_screen);
+	if (index == -1)return false;
+
+	target_screen->CleanUp();
+	screens.del(screens.At(index));
+
+	return true;
+}
+
 UI_Element* j1Gui::GenerateUI_Element(UI_TYPE element_type)
 {
 	UI_Element* new_element = nullptr;

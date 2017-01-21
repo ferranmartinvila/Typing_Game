@@ -30,6 +30,8 @@ private:
 	int						x_margin = 0;
 	int						y_margin = 0;
 
+	uint					born_time = 0;
+
 public:
 
 	//Game Loop ------------
@@ -48,9 +50,10 @@ public:
 	SDL_Texture*	GetTexture()const;
 	char			GetTextCharTarget()const;
 	uint			GetScore()const;
-
+	int				GetBornTime()const;
 	void			SetText(char* new_text);
 	void			SetPosition(int x, int y);
+	void			SetBornTime(uint time);
 
 	void			PlusCharIndex();
 	void			ResetCharIndex();

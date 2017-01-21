@@ -40,26 +40,43 @@ public:
 	// Recieve UI input and work with it
 	void GUI_Input(UI_Element* target, GUI_INPUT input);
 
+	//Active/Deasctive scene
+	void Activate();
+	void Desactive();
+
 private:
 
 	//Scene UI ------------------------
-	UI_String*	player_score;
-	UI_String*	player_max_score;
-	UI_String*	player_lvl;
-	UI_Image*	player_data_marks;
+	UI_Element*	screen_ui = nullptr;
+	UI_String*	player_score_title = nullptr;
+	UI_String*	player_score = nullptr;
+	UI_String*	player_max_score_title = nullptr;
+	UI_String*	player_max_score = nullptr;
+	UI_String*	player_lvl_title = nullptr;
+	UI_String*	player_lvl = nullptr;
+	UI_Image*	height_limit = nullptr;
 
 	//Background ----------------------
-	SDL_Texture*		background;
-	PhysBody*			background_collide_mark;
+	SDL_Texture*		background = nullptr;
+	PhysBody*			background_collide_mark = nullptr;
 
 	//Timming ----------------------------
 	j1Timer				label_generate_timer;
 	uint				label_rate = 1000;
+	
+	j1Timer				scene_time;
+	uint				timer_margin = 3;
 
 public:
 
 	//Functionality -----------------------------
 	void	SetPlayerScoreText(uint score_value);
+	void	SetPlayerMaxScoreText(uint max_value);
+	void	SetPlayerLevelText(uint level_value);
+
+	void	SetLabelRate(uint rate);
+
+	uint	GetHeightLimit()const;
 };
 
 #endif // __j1SCENE_H__

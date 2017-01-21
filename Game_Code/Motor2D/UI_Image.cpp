@@ -6,7 +6,7 @@ UI_Image::UI_Image(const SDL_Rect& box, const SDL_Rect& texture_rect, int textur
 
 UI_Image::UI_Image(const UI_Image* copy) : UI_Element(copy->box, IMG), texture_rect(copy->texture_rect), texture_id(copy->texture_id) {}
 
-UI_Image::UI_Image() : UI_Element({ 0,0,0,0 }, IMG), texture_rect({ 0,0,0,0 }) {}
+UI_Image::UI_Image() : UI_Element({ 0,0,0,0 }, IMG), texture_rect({ 0,0,0,0 }),texture_id(-1) {}
 
 //Destructors =============================================
 UI_Image::~UI_Image()

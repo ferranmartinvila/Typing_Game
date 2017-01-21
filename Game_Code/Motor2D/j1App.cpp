@@ -20,6 +20,7 @@
 #include "j1Console.h"
 #include "BlocksManager.h"
 #include "Player.h"
+#include "j1Intro.h"
 
 #include "j1App.h"
 
@@ -42,6 +43,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	console = new j1Console();
 	blocks_manager = new j1BlocksManager();
 	player = new j1Player();
+	intro = new j1Intro();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -57,6 +59,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	
 	// scene last
 	AddModule(scene);
+	AddModule(intro);
 	AddModule(player);
 	AddModule(gui);
 	AddModule(console);
@@ -175,7 +178,6 @@ bool j1App::Awake()
 // Called before the first frame
 bool j1App::Start()
 {
-
 	PERF_START(ptimer);
 	bool ret = true;
 	p2List_item<j1Module*>* item;
@@ -194,10 +196,14 @@ bool j1App::Start()
 	console->AddCommand("quit", nullptr);
 	console->AddCommand("save", nullptr);
 	console->AddCommand("load", nullptr);
+	console->AddCommand("change_scene", nullptr);
 
 	//Add Console Cvars
 	save_dir = App->console->AddCvar("save_dir", "Directory where game data is saved", "game_save.xml", C_VAR_TYPE::CHAR_VAR, nullptr, false);
-	load_dir = App->console->AddCvar("load_dir", "Directory from app load data", "game_save.xml", C_VAR_TYPE::CHAR_VAR, nullptr, false);
+	load_dir = App->console->AddCvar("load_dir", "Directory where app load data", "game_save.xml", C_VAR_TYPE::CHAR_VAR, nullptr, false);
+	
+	//Desactive gameplay scene
+	scene->Desactive();
 
 	return ret;
 }
@@ -299,11 +305,7 @@ bool j1App::PreUpdate()
 	{
 		pModule = item->data;
 
-		if(pModule->active == false) {
-			continue;
-		}
-
-		ret = item->data->PreUpdate();
+		if(pModule->active)ret = item->data->PreUpdate();
 	}
 
 	return ret;
@@ -321,11 +323,7 @@ bool j1App::DoUpdate()
 	{
 		pModule = item->data;
 
-		if(pModule->active == false) {
-			continue;
-		}
-
-		ret = item->data->Update(dt);
+		if(pModule->active)ret = item->data->Update(dt);
 	}
 
 	return ret;
@@ -342,14 +340,11 @@ bool j1App::PostUpdate()
 	{
 		pModule = item->data;
 
-		if(pModule->active == false) {
-			continue;
-		}
+		if(pModule->active)ret = item->data->PostUpdate();
 
-		ret = item->data->PostUpdate();
 	}
 
-	ret = !want_to_quit;
+	if(ret)ret = !want_to_quit;
 
 	return ret;
 }
@@ -604,6 +599,20 @@ j1Module * j1App::GetModuleAt(uint index) const
 	return modules.At(index)->data;
 }
 
+void j1App::ChangeScene()
+{
+	if (intro->active)
+	{
+		intro->Desactive();
+		scene->Activate();
+	}
+	else
+	{
+		scene->Desactive();
+		intro->Activate();
+	}
+}
+
 pugi::xml_node j1App::GetConfigXML() const
 {
 	return config_node;
@@ -623,6 +632,10 @@ void j1App::Console_Command_Input(Command * command, Cvar * cvar, p2SString * in
 	else if (*command->GetCommandStr() == "load")
 	{
 		LoadGame(load_dir->GetValueString()->GetString());
+	}
+	else if (*command->GetCommandStr() == "change_scene")
+	{
+		ChangeScene();
 	}
 }
 

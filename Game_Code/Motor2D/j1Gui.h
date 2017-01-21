@@ -83,6 +83,7 @@ public:
 
 	//UI elements functions
 	uint				PushScreen(const UI_Element* new_screen);
+	bool				DeleteScreen(UI_Element* target_screen);
 	UI_Element*			GenerateUI_Element(UI_TYPE element_type);
 
 	UI_Element*			GetActiveScreen()const;

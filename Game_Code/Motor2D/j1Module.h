@@ -100,6 +100,16 @@ public:
 
 	}
 
+	//Active/Deasctive module
+	void Activate()
+	{
+		active = true;
+	}
+	void Desactivate()
+	{
+		active = false;
+	}
+
 public:
 
 	p2SString	name;

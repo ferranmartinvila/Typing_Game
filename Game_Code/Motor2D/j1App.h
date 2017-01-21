@@ -21,6 +21,7 @@ class j1Console;
 class j1Physics;
 class j1BlocksManager;
 class j1Player;
+class j1Intro;
 
 class j1App
 {
@@ -97,6 +98,7 @@ public:
 	j1Console*			console = NULL;
 	j1BlocksManager*	blocks_manager = NULL;
 	j1Player*			player = NULL;
+	j1Intro*			intro = NULL;
 
 	// Add a new module to handle
 	void		AddModule(j1Module* module);
@@ -106,6 +108,9 @@ public:
 	uint		GetModulesNum()const;
 	//Get module of position x in array
 	j1Module*	GetModuleAt(uint index)const;
+
+	//Change game current scene
+	void	ChangeScene();
 
 public:
 

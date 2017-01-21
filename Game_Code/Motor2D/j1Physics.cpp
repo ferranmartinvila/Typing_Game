@@ -271,7 +271,7 @@ PhysBody* j1Physics::CreateSensorChain(int x, int y, int* points, int size, coll
 
 bool j1Physics::DeleteBody(PhysBody * target)
 {
-	if (target == nullptr)
+	if (target->body == nullptr)
 	{
 		LOG("Invalid PhysBody to delete");
 		return false;
