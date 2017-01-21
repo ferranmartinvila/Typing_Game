@@ -21,6 +21,7 @@
 #include "BlocksManager.h"
 #include "Player.h"
 #include "j1Intro.h"
+#include "j1SceneManager.h"
 
 #include "j1App.h"
 
@@ -44,6 +45,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	blocks_manager = new j1BlocksManager();
 	player = new j1Player();
 	intro = new j1Intro();
+	scene_manager = new j1SceneManager();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -63,6 +65,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(player);
 	AddModule(gui);
 	AddModule(console);
+	AddModule(scene_manager);
 
 	// render last to swap buffer
 	AddModule(render);
@@ -203,7 +206,8 @@ bool j1App::Start()
 	load_dir = App->console->AddCvar("load_dir", "Directory where app load data", "game_save.xml", C_VAR_TYPE::CHAR_VAR, nullptr, false);
 	
 	//Desactive gameplay scene
-	scene->Desactive();
+	scene->Desactivate();
+	scene_manager->Desactivate();
 
 	return ret;
 }
@@ -599,20 +603,6 @@ j1Module * j1App::GetModuleAt(uint index) const
 	return modules.At(index)->data;
 }
 
-void j1App::ChangeScene()
-{
-	if (intro->active)
-	{
-		intro->Desactive();
-		scene->Activate();
-	}
-	else
-	{
-		scene->Desactive();
-		intro->Activate();
-	}
-}
-
 pugi::xml_node j1App::GetConfigXML() const
 {
 	return config_node;
@@ -635,7 +625,7 @@ void j1App::Console_Command_Input(Command * command, Cvar * cvar, p2SString * in
 	}
 	else if (*command->GetCommandStr() == "change_scene")
 	{
-		ChangeScene();
+		App->scene_manager->ChangeScene();
 	}
 }
 

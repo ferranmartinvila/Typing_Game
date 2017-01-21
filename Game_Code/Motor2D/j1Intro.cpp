@@ -6,6 +6,7 @@
 #include "j1Textures.h"
 #include "j1Render.h"
 #include "j1Input.h"
+#include "j1SceneManager.h"
 
 //UI Elements
 #include "UI_Button.h"
@@ -115,7 +116,7 @@ void j1Intro::GUI_Input(UI_Element * target, GUI_INPUT input)
 		}
 		else if (target == start_button)
 		{
-			App->ChangeScene();
+			App->scene_manager->ChangeScene(1500);
 		}
 		break;
 	case MOUSE_LEFT_BUTTON_REPEAT:
@@ -150,7 +151,7 @@ void j1Intro::Activate()
 	quit_button->Activate();
 }
 
-void j1Intro::Desactive()
+void j1Intro::Desactivate()
 {
 	LOG("Intro Desactivated!");
 	active = false;

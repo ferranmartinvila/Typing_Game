@@ -27,6 +27,12 @@ void j1Player::EndParty()
 	LOG("You Lose :(");
 }
 
+void j1Player::StartParty()
+{
+	alive = true;
+	LOG("Party Started!");
+}
+
 bool j1Player::GetPlayerState() const
 {
 	return alive;

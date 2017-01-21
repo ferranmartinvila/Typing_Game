@@ -11,6 +11,7 @@
 #include "j1Scene.h"
 #include "j1Physics.h"
 #include "Player.h"
+#include "j1SceneManager.h"
 
 //UI Elements
 #include "UI_String.h"
@@ -161,7 +162,7 @@ bool j1Scene::Update(float dt)
 	if (App->player->GetPlayerState())
 	{
 		//Check label generate timer
-		if (label_generate_timer.Read() > label_rate) {
+		if (label_generate_timer.Read() > base_label_rate / App->player->GetLevel()) {
 			TextBlock* item = App->blocks_manager->GenerateRandomTextBlock(5, 2);
 			item->SetBornTime(scene_time.ReadSec());
 			label_generate_timer.Start();
@@ -184,7 +185,7 @@ bool j1Scene::PostUpdate()
 	bool ret = true;
 
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-		App->ChangeScene();
+		App->scene_manager->ChangeScene(500);
 
 	return ret;
 }
@@ -247,9 +248,10 @@ void j1Scene::Activate()
 	label_generate_timer.Start();
 	App->physics->Activate();
 	App->blocks_manager->Activate();
+	App->player->StartParty();
 }
 
-void j1Scene::Desactive()
+void j1Scene::Desactivate()
 {
 	LOG("Scene Desactivated!");
 	active = false;
@@ -296,7 +298,7 @@ void j1Scene::SetPlayerLevelText(uint level_value)
 
 void j1Scene::SetLabelRate(uint rate)
 {
-	label_rate = rate;
+	base_label_rate = rate;
 }
 
 uint j1Scene::GetHeightLimit() const

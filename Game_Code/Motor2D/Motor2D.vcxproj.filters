@@ -78,6 +78,9 @@
     <ClCompile Include="j1Intro.cpp">
       <Filter>Game\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="j1SceneManager.cpp">
+      <Filter>Game\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -182,6 +185,9 @@
       <Filter>Game\Player</Filter>
     </ClInclude>
     <ClInclude Include="j1Intro.h">
+      <Filter>Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="j1SceneManager.h">
       <Filter>Game\Scenes</Filter>
     </ClInclude>
   </ItemGroup>

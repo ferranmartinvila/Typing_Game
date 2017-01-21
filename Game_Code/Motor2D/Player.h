@@ -41,6 +41,8 @@ public:
 
 	//Functionality
 	void	EndParty();
+	void	StartParty();
+
 	bool	GetPlayerState()const;
 
 	uint	PlusScore(uint plus);

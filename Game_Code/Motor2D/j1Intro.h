@@ -39,7 +39,7 @@ public:
 
 	//Active/Deasctive intro
 	void Activate();
-	void Desactive();
+	void Desactivate();
 
 private:
 

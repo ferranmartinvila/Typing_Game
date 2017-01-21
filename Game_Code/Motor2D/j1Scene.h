@@ -31,7 +31,7 @@ public:
 	// Called each loop iteration
 	bool Update(float dt);
 
-	// Called before all Updates
+	// Called after all Updates
 	bool PostUpdate();
 
 	// Called before quitting
@@ -42,7 +42,7 @@ public:
 
 	//Active/Deasctive scene
 	void Activate();
-	void Desactive();
+	void Desactivate();
 
 private:
 
@@ -62,8 +62,8 @@ private:
 
 	//Timming ----------------------------
 	j1Timer				label_generate_timer;
-	uint				label_rate = 1000;
-	
+	uint				base_label_rate = 3000;
+
 	j1Timer				scene_time;
 	uint				timer_margin = 3;
 
