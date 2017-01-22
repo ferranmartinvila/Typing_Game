@@ -16,6 +16,7 @@
 //UI Elements
 #include "UI_String.h"
 #include "UI_Image.h"
+#include "UI_Button.h"
 
 //Text Blocks
 #include "BlocksManager.h"
@@ -63,6 +64,8 @@ bool j1Scene::Start()
 	//Load Scene Audios -----------------------------------
 	box_contact_fx = App->audio->LoadFx("audio/fx/contact_fx.wav");
 	scene_quit_fx = App->audio->LoadFx("audio/fx/scene_quit_fx.wav");
+	game_lose_fx = App->audio->LoadFx("audio/fx/game_lose_fx.wav");
+	restart_fx = App->audio->LoadFx("audio/fx/restart_fx.wav");
 
 	//UI Scene build --------------------------------------
 	LOG("Building scene UI...");
@@ -131,6 +134,17 @@ bool j1Scene::Start()
 	height_limit->ChangeTextureRect({ 0,0,594,56 });
 	screen_ui->AddChild(height_limit);
 	
+	//UI Scene Restart Button build ---
+	restart_button = (UI_Button*)App->gui->GenerateUI_Element(UI_TYPE::BUTTON);
+	restart_button->SetBox({ 155,485,355,60 });
+	restart_button->SetTexON({ 0,495,355,60 });
+	restart_button->SetTexOVER({ 0,563,355,60 });
+	restart_button->SetTexOFF({ 0,633,355,58 });
+	restart_button->SetInputTarget(this);
+	restart_button->Desactivate();
+	screen_ui->AddChild(restart_button);
+
+
 	App->gui->PushScreen(screen_ui);
 	// ----------------------------------------------------
 
@@ -175,8 +189,10 @@ bool j1Scene::Update(float dt)
 		//Check blocks height
 		if (App->blocks_manager->GetHigherBlock(scene_time.ReadSec() - timer_margin) != nullptr)
 		{
+			App->audio->PlayFx(game_lose_fx);
 			App->player->EndParty();
-			App->blocks_manager->GetHigherBlock(scene_time.ReadSec() - timer_margin);
+			App->SaveGame(App->GetSaveDir());
+			restart_button->Activate();
 		}
 	}
 
@@ -219,6 +235,12 @@ void j1Scene::GUI_Input(UI_Element* target, GUI_INPUT input)
 	case RIGHT_ARROW:
 		break;
 	case MOUSE_LEFT_BUTTON_DOWN:
+		if (target == restart_button)
+		{
+			App->audio->PlayFx(restart_fx);
+			App->player->StartParty();
+			restart_button->Desactivate();
+		}
 		break;
 	case MOUSE_LEFT_BUTTON_REPEAT:
 		break;
@@ -275,6 +297,7 @@ void j1Scene::Desactivate()
 	player_lvl_title->Desactivate();
 	player_lvl->Desactivate();
 	height_limit->Desactivate();
+	restart_button->Desactivate();
 	App->blocks_manager->DeleteAllBlocks();
 	App->blocks_manager->Desactivate();
 	App->physics->Desactivate();

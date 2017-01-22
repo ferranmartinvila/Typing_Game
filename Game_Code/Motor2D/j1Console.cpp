@@ -743,6 +743,12 @@ void j1Console::Console_Command_Input(Command * command, Cvar * cvar, p2SString 
 				console_variables[k]->GetCvarName()->GetString(), module.GetString(), console_variables[k]->GetCvarDescription()->GetString(),
 				CvarTypetoString(console_variables[k]->GetCvarType()), console_variables[k]->GetValueString()->GetString(),only_read.GetString());
 		}
+
+		uint command_num = commands.Count();
+		for (uint k = 0; k < command_num; k++)
+		{
+			GenerateConsoleLabel("Command: %s", commands[k]->GetCommandStr()->GetString());
+		}
 	}
 
 }

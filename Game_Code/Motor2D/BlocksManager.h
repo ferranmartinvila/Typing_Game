@@ -45,6 +45,8 @@ private:
 	pugi::xml_document	strings_doc;
 	p2DynArray<char*>	strings;
 
+	uint block_break_fx;
+
 public:
 	
 	
@@ -75,5 +77,9 @@ public:
 
 	//Handle Console Input ----------------------
 	void Console_Command_Input(Command* command, Cvar* cvar, p2SString* input);
+
+	//Audio Play --------------------------------
+	void	PlayBlockBreakFx()const;
+
 };
 #endif // _BLOCKS_MANAGER_

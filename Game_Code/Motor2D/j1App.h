@@ -113,16 +113,11 @@ public:
 
 public:
 
-	//Get config xml file
-	pugi::xml_node GetConfigXML()const;
-
 	//Handle Console Input ----------------------
 	void Console_Command_Input(Command* command, Cvar* cvar, p2SString* input);
 	void Console_Cvar_Input(Cvar* cvar, Command* command_type, p2SString* input);
 
 private:
-
-	pugi::xml_node config_node;
 
 	p2List<j1Module*>	modules;
 	int					argc;
@@ -133,7 +128,7 @@ private:
 
 	mutable bool		want_to_save = false;
 	bool				want_to_load = false;
-	p2SString			load_game;
+	mutable p2SString	load_game;
 	mutable p2SString	save_game;
 
 	j1PerfTimer			ptimer;
@@ -156,6 +151,10 @@ private:
 public:
 
 	void SetQuit();
+
+	const char*	GetSaveDir()const;
+	const char*	GetLoadDir()const;
+
 
 };
 

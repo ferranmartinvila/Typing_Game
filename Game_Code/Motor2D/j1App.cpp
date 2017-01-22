@@ -204,7 +204,12 @@ bool j1App::Start()
 	//Add Console Cvars
 	save_dir = App->console->AddCvar("save_dir", "Directory where game data is saved", "game_save.xml", C_VAR_TYPE::CHAR_VAR, nullptr, false);
 	load_dir = App->console->AddCvar("load_dir", "Directory where app load data", "game_save.xml", C_VAR_TYPE::CHAR_VAR, nullptr, false);
-	
+	load_game = *load_dir->GetValueString();
+	save_game = *save_dir->GetValueString();
+
+	//Load game state data
+	LoadGame(load_game.GetString());
+
 	//Desactive gameplay scene
 	scene->Desactivate();
 	scene_manager->Desactivate();
@@ -373,8 +378,6 @@ bool j1App::CleanUp()
 	if (str_item != nullptr)item_prev = str_item->prev;
 	while (str_item) {
 
-		//CleanUp the item childs
-		ret = item->data->CleanUp();
 		//Delete all item data
 		saved_games.del(str_item);
 
@@ -423,23 +426,8 @@ const char* j1App::GetOrganization() const
 // Load / Save
 void j1App::LoadGame(const char* file)
 {
-	bool ret = false;
-	p2List_item<p2SString*>* saved_game = saved_games.start;
-	while (saved_game != NULL)
-	{
-		if (*saved_game->data == file)
-		{
-			ret = true;
-			break;
-		}
-		saved_game = saved_game->next;
-	}
-	if (ret)
-	{
-		want_to_load = true;
-		load_game.create("%s%s", fs->GetSaveDirectory(), file);
-	}
-	else LOG("Load Directory is no available!");
+	want_to_load = true;
+	load_game.create("%s%s", fs->GetSaveDirectory(), file);
 }
 
 // ---------------------------------------
@@ -456,7 +444,6 @@ void j1App::SaveGame(const char* file) const
 	{
 		p2SString* new_file_str = new p2SString(file);
 		saved_games.add(new_file_str);
-
 	}
 
 	want_to_save = true;
@@ -567,7 +554,7 @@ bool j1App::SavegameNow() const
 
 		// we are done, so write data to disk
 		fs->Save(save_game.GetString(), stream.str().c_str(), stream.str().length());
-		LOG("... finished saving", save_game.GetString());
+		LOG("... finished saving");
 	}
 	else
 		LOG("Save process halted from an error in module %s", (item != NULL) ? item->data->name.GetString() : "unknown");
@@ -601,11 +588,6 @@ uint j1App::GetModulesNum() const
 j1Module * j1App::GetModuleAt(uint index) const
 {
 	return modules.At(index)->data;
-}
-
-pugi::xml_node j1App::GetConfigXML() const
-{
-	return config_node;
 }
 
 void j1App::Console_Command_Input(Command * command, Cvar * cvar, p2SString * input)
@@ -688,6 +670,16 @@ void j1App::Console_Cvar_Input(Cvar * cvar, Command* command_type, p2SString * i
 void j1App::SetQuit()
 {
 	want_to_quit = true;
+}
+
+const char * j1App::GetSaveDir() const
+{
+	return save_dir->GetValueString()->GetString();
+}
+
+const char * j1App::GetLoadDir() const
+{
+	return load_dir->GetValueString()->GetString();
 }
 
 

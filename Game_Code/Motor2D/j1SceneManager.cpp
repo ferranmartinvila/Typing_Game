@@ -28,9 +28,6 @@ bool j1SceneManager::Start()
 // Update: draw background
 bool j1SceneManager::PostUpdate()
 { 
-	if (current_step == none)
-		return true;
-
 	float normalized = MIN(1.0f, (float)fade_timer.Read() / (float)total_time);
 	
 	switch (current_step)

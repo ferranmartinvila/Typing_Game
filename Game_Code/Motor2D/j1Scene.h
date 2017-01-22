@@ -8,6 +8,7 @@
 struct SDL_Texture;
 struct UI_String;
 struct UI_Image;
+struct UI_Button;
 struct PhysBody;
 
 class j1Scene : public j1Module
@@ -58,6 +59,7 @@ private:
 	UI_String*	player_lvl_title = nullptr;
 	UI_String*	player_lvl = nullptr;
 	UI_Image*	height_limit = nullptr;
+	UI_Button*	restart_button = nullptr;
 
 	//Background ----------------------
 	SDL_Texture*		background = nullptr;
@@ -73,6 +75,8 @@ private:
 	//Audio ---------------------------
 	uint	box_contact_fx;
 	uint	scene_quit_fx;
+	uint	game_lose_fx;
+	uint	restart_fx;
 
 public:
 

@@ -15,6 +15,7 @@
 #include "j1Textures.h"
 #include "Player.h"
 #include"j1Scene.h"
+#include "j1Audio.h"
 
 //Constructors ----------------------------------
 j1BlocksManager::j1BlocksManager()
@@ -54,11 +55,14 @@ bool j1BlocksManager::Awake(pugi::xml_node & config)
 
 bool j1BlocksManager::Start()
 {
+	//Load audios
+	block_break_fx = App->audio->LoadFx("audio/fx/block_break_fx.wav");
+
 	default_font = App->font->default;
-	default_target_color = { 141, 255, 238,150 };
+	default_target_color = { 180, 180, 80,255 };
 	default_nontarget_color = { 0,0,0,255 };
-	default_color_on = { 0,255,255,180 };
-	default_color_off = { 255,105,255,0 };
+	default_color_on = { 0,0,0,255 };
+	default_color_off = { 255,255,255,255 };
 
 	//Add Console Command
 	App->console->AddCommand("reset", this);
@@ -311,6 +315,11 @@ void j1BlocksManager::Console_Command_Input(Command * command, Cvar * cvar, p2SS
 	//Generate Block command
 	if (*command->GetCommandStr() == "generate_block")
 	{
-		GenerateTextBlock("new_block");
+		GenerateRandomTextBlock(5,2);
 	}
+}
+
+void j1BlocksManager::PlayBlockBreakFx() const
+{
+	App->audio->PlayFx(block_break_fx);
 }

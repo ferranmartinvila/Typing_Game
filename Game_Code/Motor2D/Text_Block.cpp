@@ -20,6 +20,8 @@ TextBlock::~TextBlock()
 {
 }
 
+
+
 //Game Loop -------------------------------------
 bool TextBlock::Update()
 {
@@ -173,6 +175,7 @@ void TextBlock::PlusCharIndex()
 	char_index++;
 	if (char_index == text.Length())
 	{
+		App->blocks_manager->PlayBlockBreakFx();
 		App->blocks_manager->DeleteTarget();
 		return;
 	}

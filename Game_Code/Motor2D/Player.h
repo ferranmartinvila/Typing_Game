@@ -13,20 +13,9 @@ public:
 	// Called before render is available
 	bool Awake(pugi::xml_node& config);
 
-	/*// Called before the first frame
-	bool Start();
+	bool Load(pugi::xml_node&);
 
-	// Called before all Updates
-	bool PreUpdate();
-
-	// Called each loop iteration
-	bool Update(float dt);
-
-	// Called before all Updates
-	bool PostUpdate();
-
-	// Called before quitting
-	bool CleanUp();*/
+	bool Save(pugi::xml_node&)const;
 
 private:
 

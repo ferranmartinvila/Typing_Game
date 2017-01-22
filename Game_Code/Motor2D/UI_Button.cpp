@@ -45,7 +45,7 @@ void UI_Button::Draw(bool debug)
 void UI_Button::HandleInput()
 {
 	//Mouse In/Out ------------------------------
-	if (this->MouseIsIn() && App->gui->upper_element == this->layer)
+	if (this->MouseIsIn() && App->gui->upper_element <= this->layer)
 	{
 		button_state = OVER;
 		input_target->GUI_Input(this, MOUSE_IN);
