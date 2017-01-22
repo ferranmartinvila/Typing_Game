@@ -227,6 +227,9 @@ TextBlock * j1BlocksManager::GenerateTextBlock(const char * text)
 	//Create the new text block
 	TextBlock* new_block = new TextBlock(text, default_font, App->blocks_manager->default_color_off,App->blocks_manager->default_color_on);
 	
+	//Set new block listener
+	new_block->GetBody()->listener = App->scene;
+
 	//Add it to the manager list
 	text_blocks.add(new_block);
 
@@ -239,7 +242,10 @@ TextBlock * j1BlocksManager::GenerateRandomTextBlock(uint x_margin, uint y_margi
 {
 	//Create the new text block
 	TextBlock* new_block = new TextBlock(GetRandomWord(), default_font, App->blocks_manager->default_color_off, App->blocks_manager->default_color_on,x_margin,y_margin);
-
+	
+	//Set new block listener
+	new_block->GetBody()->listener = App->scene;
+	
 	//Add it to the manager list
 	text_blocks.add(new_block);
 

@@ -51,6 +51,10 @@ private:
 	//Background ----------------------
 	SDL_Texture*		background = nullptr;
 
+	//Audio ---------------------------
+	uint start_fx;
+
+
 public:
 
 	//Functionality -----------------------------

@@ -60,6 +60,10 @@ bool j1Scene::Start()
 	//Load Scene background -------------------------------
 	background = App->tex->Load("textures/background.png");
 
+	//Load Scene Audios -----------------------------------
+	box_contact_fx = App->audio->LoadFx("audio/fx/contact_fx.wav");
+	scene_quit_fx = App->audio->LoadFx("audio/fx/scene_quit_fx.wav");
+
 	//UI Scene build --------------------------------------
 	LOG("Building scene UI...");
 	screen_ui = App->gui->GenerateUI_Element(UI_TYPE::UNDEFINED);
@@ -185,7 +189,10 @@ bool j1Scene::PostUpdate()
 	bool ret = true;
 
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	{
+		App->audio->PlayFx(scene_quit_fx);
 		App->scene_manager->ChangeScene(500);
+	}
 
 	return ret;
 }
@@ -230,6 +237,11 @@ void j1Scene::GUI_Input(UI_Element* target, GUI_INPUT input)
 	case ENTER:
 		break;
 	}
+}
+
+void j1Scene::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
+{
+	App->audio->PlayFx(box_contact_fx);
 }
 
 void j1Scene::Activate()

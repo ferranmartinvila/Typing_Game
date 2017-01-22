@@ -7,6 +7,8 @@
 #include "j1Render.h"
 #include "j1Input.h"
 #include "j1SceneManager.h"
+#include "j1Audio.h"
+#include "SDL_mixer\include\SDL_mixer.h"
 
 //UI Elements
 #include "UI_Button.h"
@@ -28,10 +30,17 @@ bool j1Intro::Start()
 	//Load Intro scene background -----
 	background = App->tex->Load("textures/intro_background.png");
 
+	//Play Game Soundtrack --------------------------------
+	App->audio->PlayMusic("audio/music/Sewer_Ambience.ogg");
+	Mix_VolumeMusic(50);
+
 	//UI Intro build ------------------
 	LOG("Building intro UI...");
 	intro_ui = App->gui->GenerateUI_Element(UI_TYPE::UNDEFINED);
 	intro_ui->SetInputTarget(this);
+
+	//Load Audios ---------------------
+	start_fx = App->audio->LoadFx("audio/fx/start_fx.wav");
 
 	//Intro start button build --------
 	start_button = (UI_Button*)App->gui->GenerateUI_Element(UI_TYPE::BUTTON);
@@ -116,6 +125,7 @@ void j1Intro::GUI_Input(UI_Element * target, GUI_INPUT input)
 		}
 		else if (target == start_button)
 		{
+			App->audio->PlayFx(start_fx);
 			App->scene_manager->ChangeScene(1500);
 		}
 		break;

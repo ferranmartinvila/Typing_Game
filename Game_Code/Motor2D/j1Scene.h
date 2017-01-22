@@ -40,6 +40,9 @@ public:
 	// Recieve UI input and work with it
 	void GUI_Input(UI_Element* target, GUI_INPUT input);
 
+	// Recieve Physics Collisions
+	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
+
 	//Active/Deasctive scene
 	void Activate();
 	void Desactivate();
@@ -66,6 +69,10 @@ private:
 
 	j1Timer				scene_time;
 	uint				timer_margin = 3;
+
+	//Audio ---------------------------
+	uint	box_contact_fx;
+	uint	scene_quit_fx;
 
 public:
 
