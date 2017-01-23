@@ -62,7 +62,7 @@ public:
 	SDL_Texture*	GetDefaultBlockTexture()const;
 	SDL_Color		GetTargetColor()const;
 	SDL_Color		GetNonTargetColor()const;
-	TextBlock*		GetHigherBlock(int time)const;
+	TextBlock*		GetHigherBlock()const;
 
 	//Set Functions -----------------------------
 	void		SetDefalutColor(const SDL_Color& new_color);

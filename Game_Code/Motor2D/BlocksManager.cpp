@@ -184,7 +184,7 @@ SDL_Color j1BlocksManager::GetNonTargetColor() const
 	return default_nontarget_color;
 }
 
-TextBlock * j1BlocksManager::GetHigherBlock(int time) const
+TextBlock * j1BlocksManager::GetHigherBlock() const
 {
 	if (text_blocks.start == nullptr)return nullptr;
 	
@@ -196,7 +196,7 @@ TextBlock * j1BlocksManager::GetHigherBlock(int time) const
 	{
 		item->data->GetPosition(x, y);
 
-		if ((time - item->data->GetBornTime()) > 0 && y < App->scene->GetHeightLimit())
+		if (y < App->scene->GetHeightLimit() && item->data->GetBornTime() < App->scene->GetSceneTimer() - App->scene->GetTimerMargin())
 		{
 			target = item->data;
 			break;

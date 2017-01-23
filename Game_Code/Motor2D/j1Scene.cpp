@@ -66,6 +66,7 @@ bool j1Scene::Start()
 	scene_quit_fx = App->audio->LoadFx("audio/fx/scene_quit_fx.wav");
 	game_lose_fx = App->audio->LoadFx("audio/fx/game_lose_fx.wav");
 	restart_fx = App->audio->LoadFx("audio/fx/restart_fx.wav");
+	limit_alarm_fx = App->audio->LoadFx("audio/fx/limit_alarm_fx.wav");
 
 	//UI Scene build --------------------------------------
 	LOG("Building scene UI...");
@@ -180,14 +181,29 @@ bool j1Scene::Update(float dt)
 	if (App->player->GetPlayerState())
 	{
 		//Check label generate timer
-		if (label_generate_timer.Read() > base_label_rate / App->player->GetLevel()) {
+		if (label_generate_timer.Read() > base_label_rate / (App->player->GetLevel() * 0.5)) {
 			TextBlock* item = App->blocks_manager->GenerateRandomTextBlock(5, 2);
-			item->SetBornTime(scene_time.ReadSec());
+			item->SetBornTime(scene_time.Read());
 			label_generate_timer.Start();
 		}
 
 		//Check blocks height
-		if (App->blocks_manager->GetHigherBlock(scene_time.ReadSec() - timer_margin) != nullptr)
+		if (App->blocks_manager->GetHigherBlock() != nullptr)
+		{
+			if (!timer_started)
+			{
+				height_limit->ChangeTextureRect({ 0,702,598,56 });
+				App->audio->PlayFx(limit_alarm_fx);
+				margin_timer.Start();
+				timer_started = true;
+			}
+		}
+		else if(timer_started)
+		{
+			timer_started = false;
+			height_limit->ChangeTextureRect({ 0,0,594,56 });
+		}
+		if(timer_started && margin_timer.Read() > timer_margin)
 		{
 			App->audio->PlayFx(game_lose_fx);
 			App->player->EndParty();
@@ -237,8 +253,13 @@ void j1Scene::GUI_Input(UI_Element* target, GUI_INPUT input)
 	case MOUSE_LEFT_BUTTON_DOWN:
 		if (target == restart_button)
 		{
+			//Play reset fx
 			App->audio->PlayFx(restart_fx);
+			//Reset Height limit
+			height_limit->ChangeTextureRect({ 0,0,594,56 });
+			//Start party again
 			App->player->StartParty();
+			//Deasctive restart button
 			restart_button->Desactivate();
 		}
 		break;
@@ -289,6 +310,8 @@ void j1Scene::Desactivate()
 {
 	LOG("Scene Desactivated!");
 	active = false;
+	timer_started = false;
+	height_limit->ChangeTextureRect({ 0,0,594,56 });
 	screen_ui->Desactivate();
 	player_score_title->Desactivate();
 	player_score->Desactivate();
@@ -339,4 +362,14 @@ void j1Scene::SetLabelRate(uint rate)
 uint j1Scene::GetHeightLimit() const
 {
 	return (height_limit->GetBox()->y + height_limit->GetBox()->h);
+}
+
+uint j1Scene::GetSceneTimer() const
+{
+	return scene_time.Read();
+}
+
+uint j1Scene::GetTimerMargin() const
+{
+	return timer_margin;
 }

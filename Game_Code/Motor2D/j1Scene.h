@@ -70,13 +70,16 @@ private:
 	uint				base_label_rate = 3000;
 
 	j1Timer				scene_time;
-	uint				timer_margin = 3;
+	j1Timer				margin_timer;
+	uint				timer_margin = 3500;
+	bool				timer_started = false;
 
 	//Audio ---------------------------
 	uint	box_contact_fx;
 	uint	scene_quit_fx;
 	uint	game_lose_fx;
 	uint	restart_fx;
+	uint	limit_alarm_fx;
 
 public:
 
@@ -88,6 +91,9 @@ public:
 	void	SetLabelRate(uint rate);
 
 	uint	GetHeightLimit()const;
+	uint	GetSceneTimer()const;
+	uint	GetTimerMargin()const;
+
 };
 
 #endif // __j1SCENE_H__
